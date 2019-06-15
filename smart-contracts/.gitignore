@@ -5,3 +5,6 @@ coverage
 coverage/*
 
 coverage.json
+
+coverageEnv
+coverageEnv/*

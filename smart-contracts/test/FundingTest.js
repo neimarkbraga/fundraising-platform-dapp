@@ -11,6 +11,7 @@ contract('Fundraising Platform', accounts => {
         _contract = await FundraisingPlatform.new();
     });
 
+    // Campaign Factory
     it('The contract should start with no campaigns.', async() => {
         try {
             await _contract.campaigns.call(0);
@@ -58,12 +59,6 @@ contract('Fundraising Platform', accounts => {
         }
     });
 
-    it('Does keep track owner of each campaign.', async() => {
-        await _contract.createCampaign('0x4e', '0x4e', '0x4e', 100, 100, {from: firstAccount});
-        let firstCreatedCampaignOwner = await _contract.campaignToOwner.call(0);
-        assert.equal(firstCreatedCampaignOwner, firstAccount);
-    });
-
     it('Does keep track campaign count of each owner.', async() => {
         let a_before = (await _contract.ownerCampaignCount.call(firstAccount)).toNumber();
         let b_before = (await _contract.ownerCampaignCount.call(secondAccount)).toNumber();
@@ -77,6 +72,8 @@ contract('Fundraising Platform', accounts => {
         assert.equal(b_before + 1, b_after);
     });
 
+
+    // Campaign Donating
     it('Does accept donation for campaign before deadline.', async() => {
         let value = 100;
 
@@ -101,6 +98,8 @@ contract('Fundraising Platform', accounts => {
         }
     });
 
+
+    // Campaign Helper
     it('Does allow campaign owner to claim/withdraw funds after deadline', async() => {
         await _contract.createCampaign('0x4e', '0x4e', '0x4e', 100, DAY, {from: firstAccount});
         await _contract.donate(0, {from: secondAccount, value: 100});
@@ -133,6 +132,12 @@ contract('Fundraising Platform', accounts => {
         catch(error) {
             assert.ok(/revert/.test(error.message));
         }
+    });
+
+    it('Does allow anyone see the list of campaign owned by an owner', async() => {
+        await _contract.createCampaign('0x4e', '0x4e', '0x4e', 100, DAY, {from: firstAccount});
+        let list = await _contract.getCampaignsByOwner.call(firstAccount, {from: secondAccount});
+        assert.equal(list.length, 1);
     });
 
     it('Does allow campaign owner to update campaign story', async() => {
@@ -206,6 +211,20 @@ contract('Fundraising Platform', accounts => {
         }
     });
 
+
+    // Campaign Ownership
+    it('Does allow anyone to see how many campaign does an owner have', async() => {
+        await _contract.createCampaign('0x4e', '0x4e', '0x4e', 100, DAY, {from: firstAccount});
+        let count = await _contract.balanceOf.call(firstAccount, {from: secondAccount});
+        assert.equal(count, 1);
+    });
+
+    it('Does allow anyone to see the owner of campaign.', async() => {
+        await _contract.createCampaign('0x4e', '0x4e', '0x4e', 100, 100, {from: firstAccount});
+        let firstCreatedCampaignOwner = await _contract.ownerOf.call(0);
+        assert.equal(firstCreatedCampaignOwner, firstAccount);
+    });
+
     it('Does allow campaign owner to transfer campaign ownership', async() => {
         await _contract.createCampaign('0x4e', '0x4e', '0x4e', 100, DAY, {from: firstAccount});
         await _contract.transferFrom(firstAccount, secondAccount, 0, {from: firstAccount});
@@ -251,6 +270,7 @@ contract('Fundraising Platform', accounts => {
         }
     });
 
+    // Fundraising Platform
     it('Does accept donation to platform and allows platform owner to see received donations', async() => {
         _contract = await FundraisingPlatform.new({ from: firstAccount });
         await _contract.donateToPlatform({from: firstAccount, value: 100});
@@ -293,4 +313,25 @@ contract('Fundraising Platform', accounts => {
             assert.ok(/revert/.test(error.message));
         }
     });
+
+
+    // Ownable
+    it('Does allow platform owner transfer ownership', async() => {
+        _contract = await FundraisingPlatform.new({ from: firstAccount });
+        await _contract.transferOwnership(secondAccount, {from: firstAccount});
+        let new_owner = await _contract.owner.call();
+        assert.equal(new_owner, secondAccount);
+    });
+
+    it('Does not allow non-owner of platform transfer ownership', async() => {
+        try {
+            _contract = await FundraisingPlatform.new({ from: firstAccount });
+            await _contract.transferOwnership(secondAccount, {from: secondAccount});
+            assert.fail();
+        }
+        catch(error) {
+            assert.ok(/revert/.test(error.message));
+        }
+    });
+
 });
