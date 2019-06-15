@@ -8,3 +8,6 @@ coverage.json
 
 coverageEnv
 coverageEnv/*
+
+build
+build/*
