@@ -13,7 +13,7 @@ contract CampaignFactory is Ownable {
         bytes32 name;
         bytes story;
         bytes imageHash;
-        uint targetAmount;
+        uint goal;
         uint deadline;
         uint raised;
     }

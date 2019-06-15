@@ -4,13 +4,22 @@ import "./CampaignFactory.sol";
 
 contract CampaignDonating is CampaignFactory {
 
-    function _isActive(Campaign storage _campaign) view internal returns (bool) {
-        return (now < _campaign.deadline);
+    modifier onlyFinished(uint _campaignId) {
+        require(_isFinished(_campaignId));
+        _;
     }
 
-    function donate(uint _campaignId) payable public {
+    modifier onlyNotFinished(uint _campaignId) {
+        require(!_isFinished(_campaignId));
+        _;
+    }
+
+    function _isFinished(uint _campaignId) view internal returns (bool) {
+        return (campaigns[_campaignId].deadline <= now);
+    }
+
+    function donate(uint _campaignId) payable public onlyNotFinished(_campaignId) {
         Campaign storage myCampaign = campaigns[_campaignId];
-        require(_isActive(myCampaign));
         myCampaign.raised = myCampaign.raised.add(msg.value);
     }
 }

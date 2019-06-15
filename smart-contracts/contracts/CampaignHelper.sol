@@ -9,9 +9,8 @@ contract CampaignHelper is CampaignDonating {
         _;
     }
 
-    function claimRaised(uint _campaignId) external onlyOwnerOf(_campaignId) {
+    function claimRaised(uint _campaignId) external onlyOwnerOf(_campaignId) onlyFinished(_campaignId) {
         Campaign storage myCampaign = campaigns[_campaignId];
-        require(!_isActive(myCampaign));
         msg.sender.transfer(myCampaign.raised);
         myCampaign.raised = 0;
     }
