@@ -1,6 +1,7 @@
 const FundraisingPlatform = artifacts.require('FundraisingPlatform');
 const { increaseTime } = require('./utils');
 
+const ZERO_ADDRESS = '0x0000000000000000000000000000000000000000';
 const DAY = 3600 * 12;
 
 contract('Fundraising Platform', accounts => {
@@ -136,6 +137,7 @@ contract('Fundraising Platform', accounts => {
 
     it('Does allow anyone see the list of campaign owned by an owner', async() => {
         await _contract.createCampaign('0x4e', '0x4e', '0x4e', 100, DAY, {from: firstAccount});
+        await _contract.createCampaign('0x4e', '0x4e', '0x4e', 100, DAY, {from: secondAccount});
         let list = await _contract.getCampaignsByOwner.call(firstAccount, {from: secondAccount});
         assert.equal(list.length, 1);
     });
@@ -270,6 +272,29 @@ contract('Fundraising Platform', accounts => {
         }
     });
 
+    it('Does not allow transfer campaign ownership if token did not match from', async() => {
+        try {
+            await _contract.createCampaign('0x4e', '0x4e', '0x4e', 100, DAY, {from: firstAccount});
+            await _contract.transferFrom(thirdAccount, secondAccount, 0, {from: firstAccount});
+            assert.fail();
+        }
+        catch(error) {
+            assert.ok(/revert/.test(error.message));
+        }
+    });
+
+    it('Does not allow transfer campaign ownership to 0 address', async() => {
+        try {
+            await _contract.createCampaign('0x4e', '0x4e', '0x4e', 100, DAY, {from: firstAccount});
+            await _contract.transferFrom(firstAccount, ZERO_ADDRESS, 0, {from: firstAccount});
+            assert.fail();
+        }
+        catch(error) {
+            assert.ok(/revert/.test(error.message));
+        }
+    });
+
+
     // Fundraising Platform
     it('Does accept donation to platform and allows platform owner to see received donations', async() => {
         _contract = await FundraisingPlatform.new({ from: firstAccount });
@@ -334,4 +359,14 @@ contract('Fundraising Platform', accounts => {
         }
     });
 
+    it('Does not allow platform owner transfer ownership to zero address', async() => {
+        try {
+            _contract = await FundraisingPlatform.new({ from: firstAccount });
+            await _contract.transferOwnership(ZERO_ADDRESS, {from: firstAccount});
+            assert.fail();
+        }
+        catch(error) {
+            assert.ok(/revert/.test(error.message));
+        }
+    });
 });
