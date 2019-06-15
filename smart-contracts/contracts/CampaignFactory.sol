@@ -24,6 +24,9 @@ contract CampaignFactory is Ownable {
     mapping (address => uint) public ownerCampaignCount;
 
     function createCampaign(bytes32 _name, bytes memory _story, bytes memory _imageHash, uint _targetAmount, uint _duration) public {
+        require(_name[0] != 0);
+        require(_targetAmount > 0);
+        require(_duration > 0);
         uint id = campaigns.push(Campaign(_name, _story, _imageHash, _targetAmount, now + _duration, 0)) - 1;
         campaignToOwner[id] = msg.sender;
         ownerCampaignCount[msg.sender] = ownerCampaignCount[msg.sender].add(1);
