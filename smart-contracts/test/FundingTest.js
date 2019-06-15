@@ -21,7 +21,7 @@ contract('Fundraising Platform', accounts => {
         }
     });
 
-    it('Anyone can create a campaign.', async() => {
+    it('Does allow anyone to create a campaign.', async() => {
         let beforeCount = (await _contract.ownerCampaignCount.call(secondAccount)).toNumber();
         await _contract.createCampaign('0x4e', '0x4e', '0x4e', 100, 100, {from: secondAccount});
         let afterCount = (await _contract.ownerCampaignCount.call(secondAccount)).toNumber();
@@ -128,6 +128,77 @@ contract('Fundraising Platform', accounts => {
             await _contract.donate(0, {from: secondAccount, value: 100});
             await increaseTime(DAY);
             await _contract.claimRaised(0, {from: secondAccount});
+            assert.fail();
+        }
+        catch(error) {
+            assert.ok(/revert/.test(error.message));
+        }
+    });
+
+    it('Does allow campaign owner to update campaign story', async() => {
+        let newStoryValue = '0x48656c6c6f20576f6c726421';
+        await _contract.createCampaign('0x4e', '0x4e', '0x4e', 100, DAY, {from: firstAccount});
+        await _contract.updateStory(0, newStoryValue, {from: firstAccount});
+        let campaign = await _contract.campaigns.call(0);
+        assert.equal(newStoryValue, campaign.story);
+    });
+
+    it('Does not allow non-owner of campaign to update campaign story', async() => {
+        try {
+            let newStoryValue = '0x48656c6c6f20576f6c726421';
+            await _contract.createCampaign('0x4e', '0x4e', '0x4e', 100, DAY, {from: firstAccount});
+            await _contract.updateStory(0, newStoryValue, {from: secondAccount});
+            assert.fail();
+        }
+        catch(error) {
+            assert.ok(/revert/.test(error.message));
+        }
+    });
+
+    it('Does allow campaign owner to update campaign image', async() => {
+        let newStoryValue = '0x48656c6c6f20576f6c726421';
+        await _contract.createCampaign('0x4e', '0x4e', '0x4e', 100, DAY, {from: firstAccount});
+        await _contract.updateImageHash(0, newStoryValue, {from: firstAccount});
+        let campaign = await _contract.campaigns.call(0);
+        assert.equal(newStoryValue, campaign.imageHash);
+    });
+
+    it('Does not allow non-owner of campaign to update campaign image', async() => {
+        try {
+            let newStoryValue = '0x48656c6c6f20576f6c726421';
+            await _contract.createCampaign('0x4e', '0x4e', '0x4e', 100, DAY, {from: firstAccount});
+            await _contract.updateImageHash(0, newStoryValue, {from: secondAccount});
+            assert.fail();
+        }
+        catch(error) {
+            assert.ok(/revert/.test(error.message));
+        }
+    });
+
+    it('Does allow campaign owner to extend deadline before deadline', async() => {
+        await _contract.createCampaign('0x4e', '0x4e', '0x4e', 100, DAY, {from: firstAccount});
+        let deadline_before = (await _contract.campaigns.call(0)).deadline.toNumber();
+        await _contract.extendDeadline(0, 100, {from: firstAccount});
+        let deadline_after = (await _contract.campaigns.call(0)).deadline.toNumber();
+        assert.equal(deadline_before + 100, deadline_after);
+    });
+
+    it('Does not allow campaign owner to extend deadline after deadline', async() => {
+        try {
+            await _contract.createCampaign('0x4e', '0x4e', '0x4e', 100, DAY, {from: firstAccount});
+            await increaseTime(DAY);
+            await _contract.extendDeadline(0, 100, {from: firstAccount});
+            assert.fail();
+        }
+        catch(error) {
+            assert.ok(/revert/.test(error.message));
+        }
+    });
+
+    it('Does not allow non-owner of campaign to extend deadline', async() => {
+        try {
+            await _contract.createCampaign('0x4e', '0x4e', '0x4e', 100, DAY, {from: firstAccount});
+            await _contract.extendDeadline(0, 100, {from: secondAccount});
             assert.fail();
         }
         catch(error) {
