@@ -1,4 +1,4 @@
-const CampaignHelper = artifacts.require('CampaignHelper');
+const CampaignOwnership = artifacts.require('CampaignOwnership');
 const { increaseTime } = require('./utils');
 
 const DAY = 3600 * 12;
@@ -8,7 +8,7 @@ contract('Fundraising Platform', accounts => {
     let _contract;
 
     beforeEach(async() => {
-        _contract = await CampaignHelper.new();
+        _contract = await CampaignOwnership.new();
     });
 
     it('The contract should start with no campaigns.', async() => {
@@ -199,6 +199,51 @@ contract('Fundraising Platform', accounts => {
         try {
             await _contract.createCampaign('0x4e', '0x4e', '0x4e', 100, DAY, {from: firstAccount});
             await _contract.extendDeadline(0, 100, {from: secondAccount});
+            assert.fail();
+        }
+        catch(error) {
+            assert.ok(/revert/.test(error.message));
+        }
+    });
+
+    it('Does allow campaign owner to transfer campaign ownership', async() => {
+        await _contract.createCampaign('0x4e', '0x4e', '0x4e', 100, DAY, {from: firstAccount});
+        await _contract.transferFrom(firstAccount, secondAccount, 0, {from: firstAccount});
+        let new_owner = await _contract.campaignToOwner.call(0);
+        assert.equal(new_owner, secondAccount);
+    });
+
+    it('Does allow campaign owner approve an address to transfer campaign ownership', async() => {
+        await _contract.createCampaign('0x4e', '0x4e', '0x4e', 100, DAY, {from: firstAccount});
+        await _contract.approve(thirdAccount, 0, {from: firstAccount});
+        await _contract.transferFrom(firstAccount, secondAccount, 0, {from: thirdAccount});
+        let new_owner = await _contract.campaignToOwner.call(0);
+        assert.equal(new_owner, secondAccount);
+
+        try {
+            await _contract.transferFrom(secondAccount, thirdAccount, 0, {from: thirdAccount});
+            assert.fail();
+        }
+        catch(error) {
+            assert.ok(/revert/.test(error.message));
+        }
+    });
+
+    it('Does not allow non-owner of campaign approve an address to transfer campaign ownership', async() => {
+        try {
+            await _contract.createCampaign('0x4e', '0x4e', '0x4e', 100, DAY, {from: firstAccount});
+            await _contract.approve(thirdAccount, 0, {from: secondAccount});
+            assert.fail();
+        }
+        catch(error) {
+            assert.ok(/revert/.test(error.message));
+        }
+    });
+
+    it('Does not allow non-owner of campaign or not approved address to transfer campaign ownership', async() => {
+        try {
+            await _contract.createCampaign('0x4e', '0x4e', '0x4e', 100, DAY, {from: firstAccount});
+            await _contract.transferFrom(firstAccount, secondAccount, 0, {from: thirdAccount});
             assert.fail();
         }
         catch(error) {
