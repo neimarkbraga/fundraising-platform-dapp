@@ -1,9 +1,8 @@
 pragma solidity ^0.5.4;
 
-import "./Ownable.sol";
 import "./SafeMath.sol";
 
-contract CampaignFactory is Ownable {
+contract CampaignFactory {
 
     using SafeMath for uint;
 
