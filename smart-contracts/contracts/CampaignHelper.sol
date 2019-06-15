@@ -26,4 +26,19 @@ contract CampaignHelper is CampaignDonating {
         }
         return result;
     }
+
+    function updateStory(uint _campaignId, bytes memory _newStory) public onlyOwnerOf(_campaignId) {
+        Campaign storage myCampaign = campaigns[_campaignId];
+        myCampaign.story = _newStory;
+    }
+
+    function updateImageHash(uint _campaignId, bytes memory _newImageHash) public onlyOwnerOf(_campaignId) {
+        Campaign storage myCampaign = campaigns[_campaignId];
+        myCampaign.imageHash = _newImageHash;
+    }
+
+    function extendDeadline(uint _campaignId, uint _duration) public onlyOwnerOf(_campaignId) onlyNotFinished(_campaignId) {
+        Campaign storage myCampaign = campaigns[_campaignId];
+        myCampaign.deadline = myCampaign.deadline.add(_duration);
+    }
 }
