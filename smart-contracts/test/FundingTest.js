@@ -135,13 +135,6 @@ contract('Fundraising Platform', accounts => {
         }
     });
 
-    it('Does allow anyone see the list of campaign owned by an owner', async() => {
-        await _contract.createCampaign('0x4e', '0x4e', '0x4e', 100, DAY, {from: firstAccount});
-        await _contract.createCampaign('0x4e', '0x4e', '0x4e', 100, DAY, {from: secondAccount});
-        let list = await _contract.getCampaignsByOwner.call(firstAccount, {from: secondAccount});
-        assert.equal(list.length, 1);
-    });
-
     it('Does allow campaign owner to update campaign story', async() => {
         let newStoryValue = '0x48656c6c6f20576f6c726421';
         await _contract.createCampaign('0x4e', '0x4e', '0x4e', 100, DAY, {from: firstAccount});
@@ -211,6 +204,25 @@ contract('Fundraising Platform', accounts => {
         catch(error) {
             assert.ok(/revert/.test(error.message));
         }
+    });
+
+    it('Can get the list of campaigns owned by an owner', async() => {
+        await _contract.createCampaign('0x4e', '0x4e', '0x4e', 100, DAY, {from: firstAccount});
+        await _contract.createCampaign('0x4e', '0x4e', '0x4e', 100, DAY, {from: secondAccount});
+        let list = await _contract.getCampaignsByOwner.call(firstAccount, {from: secondAccount});
+        assert.equal(list.length, 1);
+    });
+
+    it('Can get the finished status of each campaigns', async() => {
+        await _contract.createCampaign('0x4e', '0x4e', '0x4e', 100, DAY, {from: firstAccount});
+        await _contract.createCampaign('0x4e', '0x4e', '0x4e', 100, DAY * 2, {from: secondAccount});
+        await _contract.createCampaign('0x4e', '0x4e', '0x4e', 100, DAY * 3, {from: thirdAccount});
+        await increaseTime(DAY);
+        let list = await _contract.getCampaignsFinishStatus.call({from: secondAccount});
+        assert.equal(list.length, 3);
+        assert.equal(list[0], true);
+        assert.equal(list[1], false);
+        assert.equal(list[2], false);
     });
 
 

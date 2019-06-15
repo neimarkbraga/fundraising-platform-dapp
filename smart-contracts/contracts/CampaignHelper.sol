@@ -15,18 +15,6 @@ contract CampaignHelper is CampaignDonating {
         myCampaign.raised = 0;
     }
 
-    function getCampaignsByOwner(address _owner) view external returns (uint[] memory) {
-        uint[] memory result = new uint[](ownerCampaignCount[_owner]);
-        uint counter = 0;
-        for (uint i = 0; i < campaigns.length; i++) {
-            if (campaignToOwner[i] == _owner) {
-                result[counter] = i;
-                counter++;
-            }
-        }
-        return result;
-    }
-
     function updateStory(uint _campaignId, bytes memory _newStory) public onlyOwnerOf(_campaignId) {
         Campaign storage myCampaign = campaigns[_campaignId];
         myCampaign.story = _newStory;
@@ -40,5 +28,25 @@ contract CampaignHelper is CampaignDonating {
     function extendDeadline(uint _campaignId, uint _duration) public onlyOwnerOf(_campaignId) onlyNotFinished(_campaignId) {
         Campaign storage myCampaign = campaigns[_campaignId];
         myCampaign.deadline = myCampaign.deadline.add(_duration);
+    }
+
+    function getCampaignsByOwner(address _owner) view external returns (uint[] memory) {
+        uint[] memory result = new uint[](ownerCampaignCount[_owner]);
+        uint counter = 0;
+        for (uint i = 0; i < campaigns.length; i++) {
+            if (campaignToOwner[i] == _owner) {
+                result[counter] = i;
+                counter++;
+            }
+        }
+        return result;
+    }
+
+    function getCampaignsFinishStatus() view external returns (bool[] memory) {
+        bool[] memory result = new bool[](campaigns.length);
+        for (uint i = 0; i < campaigns.length; i++) {
+            result[i] = _isFinished(i);
+        }
+        return result;
     }
 }
