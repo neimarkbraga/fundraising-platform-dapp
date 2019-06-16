@@ -28,15 +28,26 @@
             </div>
         </nav>
         <div ref="Spacer" :style="space_style"></div>
+        <div v-if="!user" class="alert alert-warning rounded-0 m-0">
+            <h5 class="m-0">No Metamask Account Found</h5>
+            <p class="m-0">Please make sure you installed metamask on your browser to make transactions in this app.</p>
+        </div>
     </header>
 </template>
 
 <script>
+    import { mapGetters } from 'vuex';
+
     export default {
         data() {
             return {
                 space_style: {}
             };
+        },
+        computed: {
+            ...mapGetters({
+                user: 'user/data'
+            })
         },
         methods: {
             updateSpaceStyle() {

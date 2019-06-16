@@ -1,10 +1,19 @@
 import Vue from 'vue';
+import axios from 'axios';
 import App from './App.vue';
 import router from './router';
 import store from './store';
+import util from './library/util';
+
+
+import AppImageBox from './components/Plugins/image-box';
 
 
 Vue.config.productionTip = false;
+Vue.prototype.$appUtil = util;
+Vue.component('AppImageBox', AppImageBox);
+
+axios.defaults.baseURL = 'http://localhost:86';
 
 new Vue({
     store,
@@ -24,9 +33,11 @@ let getCurrentUserAddress = () => {
     return null;
 };
 let updateCurrentUser = () => {
-    store.dispatch('user/data', {
-        address: getCurrentUserAddress()
+    let address = getCurrentUserAddress();
+    if(address) store.dispatch('user/data', {
+        address: address
     });
+    else store.dispatch('user/data', null);
 };
 
 updateCurrentUser();
