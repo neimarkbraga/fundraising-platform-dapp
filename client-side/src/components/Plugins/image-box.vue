@@ -1,7 +1,7 @@
 <template>
     <div class="image-wrapper">
         <div class="image-box"
-             :data-src="finalSrc"
+             :data-src="src"
              :style="{backgroundImage: `url(${finalSrc})`}">
             <slot></slot>
         </div>

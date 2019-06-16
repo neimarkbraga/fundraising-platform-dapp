@@ -5,15 +5,24 @@ import router from './router';
 import store from './store';
 import util from './library/util';
 
-
 import AppImageBox from './components/Plugins/image-box';
+
+const ethunit = require('ethjs-unit');
 
 
 Vue.config.productionTip = false;
 Vue.prototype.$appUtil = util;
 Vue.component('AppImageBox', AppImageBox);
+Vue.filter('fromWei', function (value, unit) {
+    try {
+        return ethunit.fromWei(value, unit);
+    } catch (error) {
+        return 'Convert Error';
+    }
+});
 
 axios.defaults.baseURL = 'http://localhost:86';
+
 
 new Vue({
     store,
