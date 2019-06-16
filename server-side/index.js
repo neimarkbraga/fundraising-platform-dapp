@@ -1,4 +1,5 @@
 const express = require('express');
+const cors = require('cors');
 const Web3 = require('web3');
 const app = express();
 
@@ -7,6 +8,10 @@ let contractBuild = require('../smart-contracts/build/contracts/FundraisingPlatf
 let contractAbi = contractBuild.abi;
 let contractAddress = contractBuild.networks["5777"].address;
 let TheContract = new web3.eth.Contract(contractAbi, contractAddress);
+
+
+// enable cross origin
+app.use(cors());
 
 
 // get list of all campaigns
