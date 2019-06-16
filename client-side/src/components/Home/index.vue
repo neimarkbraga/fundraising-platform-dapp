@@ -29,7 +29,7 @@
                                              role="progressbar"></div>
                                     </div>
                                     <div class="small text-right">
-                                        {{ campaign.raised | fromWei('ether') }} of {{ campaign.goal | fromWei('ether') }} <b>ETH</b>
+                                        {{ campaign.raised | fromWei }} of {{ campaign.goal | fromWei }} <b>ETH</b>
                                     </div>
                                 </div>
                             </div>

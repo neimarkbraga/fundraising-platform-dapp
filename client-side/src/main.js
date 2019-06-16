@@ -15,7 +15,7 @@ Vue.prototype.$appUtil = util;
 Vue.component('AppImageBox', AppImageBox);
 Vue.filter('fromWei', function (value, unit) {
     try {
-        return ethunit.fromWei(value, unit);
+        return ethunit.fromWei(value, unit || 'ether');
     } catch (error) {
         return 'Convert Error';
     }
