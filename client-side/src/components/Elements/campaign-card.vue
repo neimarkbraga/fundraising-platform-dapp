@@ -1,5 +1,5 @@
 <template>
-    <div class="card shadow-sm">
+    <div class="card shadow-sm" style="overflow: hidden;">
         <div v-if="data">
             <app-image-box :src="ipfsGateway + data.imageHash" />
             <div class="card-body">

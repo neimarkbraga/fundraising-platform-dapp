@@ -26,10 +26,16 @@
                                 <span class="ml-2">Browse Campaigns</span>
                             </a>
                         </router-link>
+                        <router-link tag="li" to="/create" class="nav-item" exact>
+                            <a class="nav-link">
+                                <i class="fas fa-plus"></i>
+                                <span class="ml-2">Create a Campaign</span>
+                            </a>
+                        </router-link>
                         <router-link tag="li" to="/donate" class="nav-item" exact>
                             <a class="nav-link">
                                 <i class="fas fa-donate"></i>
-                                <span class="ml-2">Donate to Platform</span>
+                                <span class="ml-2">Donate to Creator</span>
                             </a>
                         </router-link>
                         <router-link tag="li" :to="'/address/' + user.address" v-if="user" class="nav-item ml-4" exact>
