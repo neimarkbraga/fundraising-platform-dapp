@@ -47,6 +47,7 @@ new Vue({
 
 
 // ensure user data
+let currentUser = null;
 let getCurrentUserAddress = () => {
     let web3 = window.web3 || web3 || null;
     if(web3 && web3.eth && web3.eth.accounts && web3.eth.accounts.length) {
@@ -56,16 +57,20 @@ let getCurrentUserAddress = () => {
 };
 let updateCurrentUser = () => {
     let address = getCurrentUserAddress();
-    if(address) store.dispatch('user/data', {
-        address: address
-    });
-    else store.dispatch('user/data', null);
+    if(address && currentUser !== address) {
+        store.dispatch('user/data', {
+            address: address
+        });
+        currentUser = address;
+    }
+    else if(!address) {
+        store.dispatch('user/data', null);
+        currentUser = null;
+    }
 };
 
 updateCurrentUser();
 setInterval(updateCurrentUser, 500);
-
-
 
 // listen to contract events
 if(FPContract) {
