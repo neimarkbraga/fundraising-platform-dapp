@@ -110,7 +110,7 @@ contract('Fundraising Platform', accounts => {
         await _contract.createCampaign('0x4e', '0x4e', '0x4e', 100, DAY, {from: firstAccount});
         await _contract.donate(0, {from: secondAccount, value: 100});
         await increaseTime(DAY);
-        await _contract.claimRaised(0, {from: firstAccount});
+        await _contract.withdrawBalance(0, {from: firstAccount});
         let campaign = await _contract.campaigns.call(0);
         assert.equal(campaign.balance.toNumber(), 0);
     });
@@ -119,7 +119,7 @@ contract('Fundraising Platform', accounts => {
         try {
             await _contract.createCampaign('0x4e', '0x4e', '0x4e', 100, DAY, {from: firstAccount});
             await _contract.donate(0, {from: secondAccount, value: 100});
-            await _contract.claimRaised(0, {from: firstAccount});
+            await _contract.withdrawBalance(0, {from: firstAccount});
             assert.fail();
         }
         catch(error) {
@@ -132,7 +132,7 @@ contract('Fundraising Platform', accounts => {
             await _contract.createCampaign('0x4e', '0x4e', '0x4e', 100, DAY, {from: firstAccount});
             await _contract.donate(0, {from: secondAccount, value: 100});
             await increaseTime(DAY);
-            await _contract.claimRaised(0, {from: secondAccount});
+            await _contract.withdrawBalance(0, {from: secondAccount});
             assert.fail();
         }
         catch(error) {
