@@ -1,12 +1,14 @@
 <template>
     <header>
-        <nav ref="Navbar" class="navbar navbar-expand-lg navbar-light bg-white shadow-sm fixed-top">
+        <nav ref="Navbar"
+             id="AppNavbar"
+             class="navbar navbar-expand-lg navbar-light bg-white shadow-sm fixed-top">
             <div class="container">
                 <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#MainNavbarToggler" aria-controls="MainNavbarToggler" aria-expanded="false" aria-label="Toggle navigation">
                     <span class="navbar-toggler-icon"></span>
                 </button>
                 <div class="collapse navbar-collapse" id="MainNavbarToggler">
-                    <a class="navbar-brand d-flex" href="#">
+                    <a class="navbar-brand d-flex" href="#/">
                         <div>
                             <img src="../../assets/img/logo.png"
                                  style="width: 2em"
@@ -49,7 +51,8 @@
     export default {
         data() {
             return {
-                space_style: {}
+                space_style: {},
+                sizeChecker: null
             };
         },
         computed: {
@@ -68,13 +71,11 @@
             },
         },
         mounted() {
-            window.addEventListener('resize', this.updateSpaceStyle);
-            setTimeout(() => {
-                window.dispatchEvent(new Event('resize'));
-            });
+            this.updateSpaceStyle();
+            this.sizeChecker = setInterval(this.updateSpaceStyle, 1000);
         },
         destroyed() {
-            window.removeEventListener('resize', this.updateSpaceStyle);
+            if(this.sizeChecker) clearInterval(this.sizeChecker);
         }
     }
 </script>

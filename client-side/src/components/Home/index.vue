@@ -10,7 +10,6 @@
                    href="#">{{ option.name }}</a>
             </nav>
 
-
             <div v-if="campaigns.status.errorMessage">
                 <div class="p-5 text-center">
                     <img src="../../assets/img/error.png"
@@ -36,7 +35,11 @@
 
                 <div class="row" v-else>
                     <div class="col-6 col-md-4 mt-4" v-for="campaign in campaigns.result">
-                        <app-campaign-card :data="campaign" />
+                        <a :href="'#/campaign/' + campaign.id"
+                           style="text-decoration: none"
+                           class="d-block text-body">
+                            <app-campaign-card :data="campaign" />
+                        </a>
                     </div>
 
                     <div class="col-12 mt-4" v-if="!campaigns.result.length">

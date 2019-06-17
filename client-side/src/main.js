@@ -6,6 +6,7 @@ import store from './store';
 import util from './library/util';
 
 import AppImageBox from './components/Plugins/image-box';
+import AppAffix from './components/Plugins/affix';
 
 const ethunit = require('ethjs-unit');
 
@@ -13,6 +14,8 @@ const ethunit = require('ethjs-unit');
 Vue.config.productionTip = false;
 Vue.prototype.$appUtil = util;
 Vue.component('AppImageBox', AppImageBox);
+Vue.component('AppAffix', AppAffix);
+
 Vue.filter('fromWei', function (value, unit) {
     try {
         return ethunit.fromWei(value, unit || 'ether');

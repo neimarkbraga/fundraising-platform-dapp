@@ -1,5 +1,5 @@
 <template>
-    <footer class="bg-dark text-white py-2">
+    <footer class="bg-white py-2 border-top">
         <div class="container">
             &copy; Neimark Junsay Braga
         </div>

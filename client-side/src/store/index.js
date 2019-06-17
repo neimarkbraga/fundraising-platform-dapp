@@ -28,7 +28,13 @@ export default new Vuex.Store({
         }),
         layout: createModule('config', {
             ipfsGateway: 'https://ipfs.iamneimark.com/ipfs/',
-            //ipfsGateway: 'https://gateway.ipfs.io/ipfs/'
+            //ipfsGateway: 'https://gateway.ipfs.io/ipfs/',
+            ethUnits: [
+                'wei',
+                'gwei',
+                'finney',
+                'ether'
+            ]
         })
     }
 });

@@ -14,6 +14,22 @@ let router = new Router({
                     resolve(require('@/components/Home/index.vue'));
                 });
             }
+        },
+        {
+            path: '/campaign/:id',
+            component: resolve => {
+                require.ensure(['@/components/Campaign/profile.vue'], () => {
+                    resolve(require('@/components/Campaign/profile.vue'));
+                });
+            }
+        },
+        {
+            path: '*',
+            component: resolve => {
+                require.ensure(['@/components/Errors/404.vue'], () => {
+                    resolve(require('@/components/Errors/404.vue'));
+                });
+            }
         }
     ]
 });
