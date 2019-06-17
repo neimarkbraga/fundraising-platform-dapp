@@ -20,14 +20,31 @@ app.get('/campaign', async(req, res, next) => {
         let query = req.query;
         query.finished = query.finished || null;
         query.sort = query.sort || 'latest';
+        query.owned_by = query.owned_by || '';
 
         let campaignStatuses = await TheContract.methods.getCampaignsFinishStatus.call();
+        let allowedIds = null;
         let result = [];
+
+        if(query.owned_by) {
+            allowedIds = {};
+            try {
+                let ids = await TheContract.methods.getCampaignsByOwner(query.owned_by).call();
+                for(let i = 0; i < ids.length; i++) allowedIds[ids[i].toNumber()] = true;
+            }
+            catch (error) {}
+        }
 
         for(let i = 0; i < campaignStatuses.length; i++) {
             let includeToResult = true;
+
+            // finished filter
             if(query.finished === 'true') includeToResult = campaignStatuses[i] === true;
             else if(query.finished === 'false') includeToResult = campaignStatuses[i] === false;
+
+            // owned_by filter
+            if(allowedIds && !allowedIds[i]) includeToResult = false;
+
 
             if(includeToResult) {
                 let campaign = await TheContract.methods.campaigns(i).call();
