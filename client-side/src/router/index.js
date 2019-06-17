@@ -24,6 +24,14 @@ let router = new Router({
             }
         },
         {
+            path: '/dashboard',
+            component: resolve => {
+                require.ensure(['@/components/Dashboard/index.vue'], () => {
+                    resolve(require('@/components/Dashboard/index.vue'));
+                });
+            }
+        },
+        {
             path: '*',
             component: resolve => {
                 require.ensure(['@/components/Errors/404.vue'], () => {

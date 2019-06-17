@@ -10,6 +10,7 @@ import EventBus from './library/EventBus';
 
 import AppImageBox from './components/Plugins/image-box';
 import AppAffix from './components/Plugins/affix';
+import AppJazzicon from 'vue-jazzicon';
 
 const ethunit = require('ethjs-unit');
 
@@ -20,6 +21,8 @@ Vue.prototype.$appFPContract = FPContract;
 
 Vue.component('AppImageBox', AppImageBox);
 Vue.component('AppAffix', AppAffix);
+Vue.component('AppJazzicon', AppJazzicon);
+
 
 Vue.filter('fromWei', function (value, unit) {
     try {

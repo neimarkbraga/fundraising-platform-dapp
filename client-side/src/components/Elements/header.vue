@@ -19,21 +19,34 @@
                             <p class="small m-0">Platform</p>
                         </div>
                     </a>
-                    <ul class="navbar-nav mr-auto mt-2 mt-lg-0">
-                        <li class="nav-item active">
-                            <a class="nav-link" href="#">Home <span class="sr-only">(current)</span></a>
-                        </li>
-                        <li class="nav-item">
-                            <a class="nav-link" href="#">Link</a>
-                        </li>
-                        <li class="nav-item">
-                            <a class="nav-link disabled" href="#" tabindex="-1" aria-disabled="true">Disabled</a>
-                        </li>
+                    <ul class="navbar-nav ml-auto mt-2 mt-lg-0">
+                        <router-link tag="li" to="/" class="nav-item" exact>
+                            <a class="nav-link">
+                                <i class="fas fa-th"></i>
+                                <span class="ml-2">Browse Campaigns</span>
+                            </a>
+                        </router-link>
+                        <router-link tag="li" to="/donate" class="nav-item" exact>
+                            <a class="nav-link">
+                                <i class="fas fa-donate"></i>
+                                <span class="ml-2">Donate to Platform</span>
+                            </a>
+                        </router-link>
+                        <router-link tag="li" to="/dashboard" v-if="user" class="nav-item ml-4" exact>
+                            <a class="nav-link">
+                                <div class="d-flex">
+                                    <div>
+                                        <app-jazzicon :address="user.address" :diameter="25" />
+                                    </div>
+                                    <div class="ml-2">{{ userDisplay }}</div>
+                                </div>
+                            </a>
+                        </router-link>
                     </ul>
-                    <form class="form-inline my-2 my-lg-0">
+                    <!--<form class="form-inline my-2 my-lg-0">
                         <input class="form-control mr-sm-2" type="search" placeholder="Search" aria-label="Search">
                         <button class="btn btn-outline-success my-2 my-sm-0" type="submit">Search</button>
-                    </form>
+                    </form>-->
                 </div>
             </div>
         </nav>
@@ -58,7 +71,17 @@
         computed: {
             ...mapGetters({
                 user: 'user/data'
-            })
+            }),
+            userDisplay() {
+                let user = this.user;
+                let result = '';
+                if(user) {
+                    result += user.address.slice(0, 6);
+                    result += '...';
+                    result += user.address.slice(-4);
+                }
+                return result;
+            }
         },
         methods: {
             updateSpaceStyle() {
