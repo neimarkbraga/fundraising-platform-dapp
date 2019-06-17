@@ -80,21 +80,22 @@
 
                             <div class="bg-white rounded shadow-sm">
 
+                                <!-- raise and goal status -->
                                 <div class="px-4 py-2">
-                                    <div class="small text-muted text-right">
+                                    <div class="small text-muted text-right pb-2">
                                         <i class="fas fa-stopwatch"></i>
                                         <span>&nbsp;&nbsp;</span>
                                         <span>{{ profile.deadlineEpoch }}</span>
                                     </div>
                                     <div class="d-flex">
                                         <div>
-                                            <h2 class="m-0">
+                                            <h5 class="m-0">
                                                 {{ profile.raised | fromWei }}
-                                            </h2>
+                                            </h5>
                                         </div>
                                         <div class="d-flex align-items-center">
                                             <img src="../../assets/img/ethereum.png"
-                                                 style="width: 1.5em"
+                                                 style="width: 1.2em"
                                                  alt="ETH" /> <span class="small text-muted">Raised</span>
                                         </div>
                                     </div>
@@ -113,24 +114,58 @@
                                     </div>
                                 </div>
 
+                                <!-- donate section -->
                                 <div class="border-top p-4">
-                                    <div class="form-group">
-                                        <div class="input-group">
-                                            <input type="number"
-                                                   min="1"
-                                                   placeholder="Value"
-                                                   class="form-control">
-                                            <div class="input-group-append">
-                                                <select class="btn btn-outline-secondary">
-                                                    <option v-for="unit in ethUnits">{{ unit }}</option>
-                                                </select>
-                                            </div>
-                                        </div>
-                                    </div>
 
-                                    <button type="button" class="btn btn-lg btn-primary w-100">
-                                        Donate
-                                    </button>
+                                    <!-- donate form -->
+                                    <form @submit.prevent="execDonate">
+                                        <fieldset :disabled="disableReason || donating.status.isLoading">
+                                            <div class="form-group">
+                                                <div class="input-group">
+
+                                                    <!-- donate value -->
+                                                    <input type="number"
+                                                           required="required"
+                                                           step="any"
+                                                           v-model="donating.form.value"
+                                                           placeholder="Value"
+                                                           class="form-control">
+
+                                                    <!-- donate value unit -->
+                                                    <div class="input-group-append">
+                                                        <select class="btn btn-outline-secondary"
+                                                                v-model="donating.form.unit">
+                                                            <option v-for="unit in ethUnits">{{ unit }}</option>
+                                                        </select>
+                                                    </div>
+                                                </div>
+                                            </div>
+
+                                            <!-- execute donation button -->
+                                            <button type="submit" class="btn btn-lg btn-primary w-100">
+                                                <span v-if="donating.status.isLoading" class="loader-ellipsis">
+                                                    <span></span>
+                                                    <span></span>
+                                                    <span></span>
+                                                    <span></span>
+                                                </span>
+                                                <span v-else>Donate</span>
+                                            </button>
+
+                                            <!-- donate error message -->
+                                            <div v-if="donating.status.errorMessage"
+                                                 style="overflow: auto"
+                                                 class="alert alert-danger mb-0 mt-3">
+                                                <button class="close"
+                                                        @click.prevent="donating.status.errorMessage = ''"
+                                                        type="button">&times;</button>
+                                                <p class="m-0">{{ donating.status.errorMessage }}</p>
+                                            </div>
+
+                                            <!-- donate disable reason -->
+                                            <p v-if="disableReason" class="text-center mb-0 mt-2 text-danger">{{ disableReason }}</p>
+                                        </fieldset>
+                                    </form>
                                 </div>
                             </div>
                         </app-affix>
@@ -145,9 +180,22 @@
     import axios from 'axios';
     import { mapGetters } from 'vuex';
 
+    const ethunit = require('ethjs-unit');
+
     export default {
         data() {
             return {
+                donating: {
+                    form: {
+                        value: 0,
+                        unit: 'ether'
+                    },
+                    status: {
+                        isLoading: false,
+                        errorMessage: '',
+                        successMessage: ''
+                    }
+                },
                 status: {
                     isLoading: true,
                     errorMessage: ''
@@ -160,9 +208,45 @@
                 user: 'user/data',
                 ipfsGateway: 'config/ipfsGateway',
                 ethUnits: 'config/ethUnits'
-            })
+            }),
+            disableReason() {
+                let profile = this.profile;
+                let user = this.user;
+
+                if(!user) return 'No Metamask Account Found or Metamask is not installed.';
+                if(!profile) return 'Profile is not yet loaded';
+                if(profile.finished) return 'Donation time already finished';
+                return false;
+            }
         },
         methods: {
+            async execDonate() {
+                let vm = this;
+                let params = vm.$route.params;
+                let status = vm.donating.status;
+                let form = vm.donating.form;
+                let Contract = vm.$appFPContract;
+
+                status.isLoading = true;
+                status.errorMessage = '';
+                status.successMessage = '';
+                try {
+                    let transaction = await new Promise((resolve, reject) => {
+                        Contract.donate(Number(params.id), {
+                            value: ethunit.toWei(form.value.toString(), form.unit)
+                        }, (error, result) => {
+                            if(error) reject(error);
+                            else resolve(result);
+                        });
+                    });
+
+                    console.log(transaction);
+                }
+                catch (error) {
+                    status.errorMessage = vm.$appUtil.getErrorMessage(error);
+                }
+                status.isLoading = false;
+            },
             async loadProfile() {
                 let vm = this;
                 let status = vm.status;

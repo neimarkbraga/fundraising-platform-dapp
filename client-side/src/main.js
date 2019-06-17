@@ -4,6 +4,7 @@ import App from './App.vue';
 import router from './router';
 import store from './store';
 import util from './library/util';
+import FPContract from './library/FPContract';
 
 import AppImageBox from './components/Plugins/image-box';
 import AppAffix from './components/Plugins/affix';
@@ -13,6 +14,8 @@ const ethunit = require('ethjs-unit');
 
 Vue.config.productionTip = false;
 Vue.prototype.$appUtil = util;
+Vue.prototype.$appFPContract = FPContract;
+
 Vue.component('AppImageBox', AppImageBox);
 Vue.component('AppAffix', AppAffix);
 
