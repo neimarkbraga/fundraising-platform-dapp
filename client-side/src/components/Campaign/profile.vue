@@ -162,6 +162,16 @@
                                                 <p class="m-0">{{ donating.status.errorMessage }}</p>
                                             </div>
 
+                                            <!-- donate success message -->
+                                            <div v-if="donating.status.successMessage"
+                                                 style="overflow: auto"
+                                                 class="alert alert-success mb-0 mt-3">
+                                                <button class="close"
+                                                        @click.prevent="donating.status.successMessage = ''"
+                                                        type="button">&times;</button>
+                                                <p class="m-0">{{ donating.status.successMessage }}</p>
+                                            </div>
+
                                             <!-- donate disable reason -->
                                             <p v-if="disableReason" class="text-center mb-0 mt-2 text-danger">{{ disableReason }}</p>
                                         </fieldset>
@@ -179,6 +189,7 @@
 <script>
     import axios from 'axios';
     import { mapGetters } from 'vuex';
+    import EventBus from '../../library/EventBus';
 
     const ethunit = require('ethjs-unit');
 
@@ -231,7 +242,7 @@
                 status.errorMessage = '';
                 status.successMessage = '';
                 try {
-                    let transaction = await new Promise((resolve, reject) => {
+                    let hash = await new Promise((resolve, reject) => {
                         Contract.donate(Number(params.id), {
                             value: ethunit.toWei(form.value.toString(), form.unit)
                         }, (error, result) => {
@@ -239,8 +250,8 @@
                             else resolve(result);
                         });
                     });
-
-                    console.log(transaction);
+                    form.value = 0;
+                    status.successMessage = `Thank You! Your transaction has been successfully submitted. Here is your tx hash: ${hash}`;
                 }
                 catch (error) {
                     status.errorMessage = vm.$appUtil.getErrorMessage(error);
@@ -262,10 +273,21 @@
                     status.errorMessage = vm.$appUtil.getErrorMessage(error);
                 }
                 status.isLoading = false;
+            },
+            newDonateEventHandler(data) {
+                let vm = this;
+                let profile = vm.profile;
+                if(profile.id.toString() === data.campaignId.toString()) {
+                    profile.raised = data.totalRaised;
+                }
             }
         },
         created() {
             this.loadProfile();
+            EventBus.$on('NewCampaignDonate', this.newDonateEventHandler);
+        },
+        destroyed() {
+            EventBus.$off('NewCampaignDonate', this.newDonateEventHandler);
         }
     }
 </script>

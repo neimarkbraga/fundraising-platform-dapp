@@ -5,6 +5,7 @@ import router from './router';
 import store from './store';
 import util from './library/util';
 import FPContract from './library/FPContract';
+import EventBus from './library/EventBus';
 
 import AppImageBox from './components/Plugins/image-box';
 import AppAffix from './components/Plugins/affix';
@@ -57,3 +58,19 @@ let updateCurrentUser = () => {
 
 updateCurrentUser();
 setInterval(updateCurrentUser, 500);
+
+
+
+// listen to contract events
+if(FPContract) {
+    FPContract.NewCampaignDonate().watch((error, log) => {
+        if(!error) {
+            let args = log.args;
+            EventBus.$emit('NewCampaignDonate', {
+                campaignId: args.campaignId.toNumber(),
+                value: args.value.toString(),
+                totalRaised: args.totalRaised.toString()
+            });
+        }
+    });
+}
