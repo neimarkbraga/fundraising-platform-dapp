@@ -32,7 +32,7 @@
                                 <span class="ml-2">Donate to Platform</span>
                             </a>
                         </router-link>
-                        <router-link tag="li" to="/dashboard" v-if="user" class="nav-item ml-4" exact>
+                        <router-link tag="li" :to="'/address/' + user.address" v-if="user" class="nav-item ml-4" exact>
                             <a class="nav-link">
                                 <div class="d-flex">
                                     <div>
@@ -43,10 +43,6 @@
                             </a>
                         </router-link>
                     </ul>
-                    <!--<form class="form-inline my-2 my-lg-0">
-                        <input class="form-control mr-sm-2" type="search" placeholder="Search" aria-label="Search">
-                        <button class="btn btn-outline-success my-2 my-sm-0" type="submit">Search</button>
-                    </form>-->
                 </div>
             </div>
         </nav>

@@ -24,10 +24,10 @@ let router = new Router({
             }
         },
         {
-            path: '/dashboard',
+            path: '/address/:address',
             component: resolve => {
-                require.ensure(['@/components/Dashboard/index.vue'], () => {
-                    resolve(require('@/components/Dashboard/index.vue'));
+                require.ensure(['@/components/Address/profile.vue'], () => {
+                    resolve(require('@/components/Address/profile.vue'));
                 });
             }
         },
