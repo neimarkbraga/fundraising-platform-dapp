@@ -11,6 +11,12 @@ module.exports = function(deployer, network, accounts) {
         let getRandomNumberIn = (min, max) => {
             return Math.floor(Math.random() * (max - min)) + min;
         };
+        let getRandomGoal = () => {
+            let min = 0.001;
+            let max = 50;
+            return Number((Math.random() * (max - min) + min).toFixed(3));
+        };
+
         let uploadedImages = [
             'QmYF5hdefacCZMwEYGH3hroiYpCWEehaq6azygLEHzUDtz',
             'QmYJqcZF9kssfvwguN131Unu4yKmxLzKfEKtwSULkpMaa5',
@@ -25,7 +31,7 @@ module.exports = function(deployer, network, accounts) {
                 web3.utils.stringToHex(`My Campaign #${i + 1}`),
                 web3.utils.stringToHex(`Some story of campaign #${i + 1}`),
                 web3.utils.stringToHex(uploadedImages[i]),
-                web3.utils.toWei(getRandomNumberIn(1, 100).toString(), 'finney'),
+                web3.utils.toWei(getRandomGoal().toString(), 'ether'),
                 getRandomNumberIn(1, 10) * HOUR,
                 {from: accounts[getRandomNumberIn(0, accounts.length)]});
             console.log(`Created campaign ${i + 1}`);
