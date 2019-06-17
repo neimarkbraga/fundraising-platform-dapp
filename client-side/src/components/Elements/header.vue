@@ -6,8 +6,16 @@
                     <span class="navbar-toggler-icon"></span>
                 </button>
                 <div class="collapse navbar-collapse" id="MainNavbarToggler">
-                    <a class="navbar-brand" href="#">
-                        App
+                    <a class="navbar-brand d-flex" href="#">
+                        <div>
+                            <img src="../../assets/img/logo.png"
+                                 style="width: 2em"
+                                 alt="Logo" />
+                        </div>
+                        <div class="px-2" style="line-height: 0.5em">
+                            <h6 class="m-0">Fundraising</h6>
+                            <p class="small m-0">Platform</p>
+                        </div>
                     </a>
                     <ul class="navbar-nav mr-auto mt-2 mt-lg-0">
                         <li class="nav-item active">

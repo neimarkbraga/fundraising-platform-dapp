@@ -42,8 +42,10 @@
         methods: {
             loadImage(src) {
                 this.finalSrc = '';
-                this.isLoading = true;
-                if(src) this.image.src = src;
+                if(src) {
+                    this.isLoading = true;
+                    this.image.src = src;
+                }
             }
         },
         created() {

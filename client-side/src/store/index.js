@@ -26,8 +26,9 @@ export default new Vuex.Store({
         user: createModule('user', {
             data: null
         }),
-        layout: createModule('layout', {
-            page_loading: false
+        layout: createModule('config', {
+            ipfsGateway: 'https://ipfs.iamneimark.com/ipfs/',
+            //ipfsGateway: 'https://gateway.ipfs.io/ipfs/'
         })
     }
 });
