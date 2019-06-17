@@ -68,6 +68,7 @@ app.get('/campaign/:id', async(req, res, next) => {
             deadlineEpoch: campaign.deadline.toString(),
             deadlineDate: new Date(campaign.deadline.toNumber() * 1000),
             raised: campaign.raised.toString(),
+            balance: campaign.balance.toString(),
             finished: campaign.deadline.toNumber() <= Math.floor(new Date().getTime() / 1000),
             owner: await TheContract.methods.campaignToOwner(params.id).call()
         });
