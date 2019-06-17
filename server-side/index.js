@@ -19,6 +19,7 @@ app.get('/campaign', async(req, res, next) => {
     try {
         let query = req.query;
         query.finished = query.finished || null;
+        query.sort = query.sort || 'latest';
 
         let campaignStatuses = await TheContract.methods.getCampaignsFinishStatus.call();
         let result = [];
@@ -43,6 +44,7 @@ app.get('/campaign', async(req, res, next) => {
                 });
             }
         }
+        if(query.sort === 'latest') result.reverse();
         res.json(result);
     } catch(error) {
         next(error);
