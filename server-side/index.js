@@ -58,6 +58,7 @@ app.get('/campaign/:id', async(req, res, next) => {
 
         let campaign = await TheContract.methods.campaigns(params.id).call();
         res.json({
+            id: params.id,
             name: web3.utils.hexToString(campaign.name),
             story: web3.utils.hexToString(campaign.story),
             imageHash: web3.utils.hexToString(campaign.imageHash),
