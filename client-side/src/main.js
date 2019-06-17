@@ -1,5 +1,6 @@
 import Vue from 'vue';
 import axios from 'axios';
+import moment from 'moment';
 import App from './App.vue';
 import router from './router';
 import store from './store';
@@ -26,6 +27,11 @@ Vue.filter('fromWei', function (value, unit) {
     } catch (error) {
         return 'Convert Error';
     }
+});
+Vue.filter('moment', function (value, format) {
+    format = format || 'MMM DD, YYYY hh:mm a';
+    let momentDate = moment(value);
+    return momentDate.format(format);
 });
 
 axios.defaults.baseURL = 'http://localhost:86';
@@ -70,6 +76,16 @@ if(FPContract) {
                 campaignId: args.campaignId.toNumber(),
                 value: args.value.toString(),
                 totalRaised: args.totalRaised.toString()
+            });
+        }
+    });
+
+    FPContract.WithdrawCampaignBalance().watch((error, log) => {
+        if(!error) {
+            let args = log.args;
+            EventBus.$emit('WithdrawCampaignBalance', {
+                campaignId: args.campaignId.toNumber(),
+                value: args.value.toString()
             });
         }
     });
