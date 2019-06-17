@@ -21,5 +21,6 @@ contract CampaignDonating is CampaignFactory {
     function donate(uint _campaignId) payable public onlyNotFinished(_campaignId) {
         Campaign storage myCampaign = campaigns[_campaignId];
         myCampaign.raised = myCampaign.raised.add(msg.value);
+        myCampaign.balance = myCampaign.balance.add(msg.value);
     }
 }

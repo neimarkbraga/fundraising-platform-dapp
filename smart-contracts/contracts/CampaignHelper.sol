@@ -11,8 +11,8 @@ contract CampaignHelper is CampaignDonating {
 
     function claimRaised(uint _campaignId) external onlyOwnerOf(_campaignId) onlyFinished(_campaignId) {
         Campaign storage myCampaign = campaigns[_campaignId];
-        msg.sender.transfer(myCampaign.raised);
-        myCampaign.raised = 0;
+        msg.sender.transfer(myCampaign.balance);
+        myCampaign.balance = 0;
     }
 
     function updateStory(uint _campaignId, bytes memory _newStory) public onlyOwnerOf(_campaignId) {

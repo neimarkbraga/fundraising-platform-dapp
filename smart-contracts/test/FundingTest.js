@@ -80,11 +80,16 @@ contract('Fundraising Platform', accounts => {
 
         await _contract.createCampaign('0x4e', '0x4e', '0x4e', 100, 100, {from: firstAccount});
         let raised_before_donate = (await _contract.campaigns.call(0)).raised.toNumber();
+        let balance_before_donate = (await _contract.campaigns.call(0)).balance.toNumber();
+
 
         await _contract.donate(0, {from: secondAccount, value: value});
         let raised_after_donate = (await _contract.campaigns.call(0)).raised.toNumber();
+        let balance_after_donate = (await _contract.campaigns.call(0)).raised.toNumber();
 
         assert.equal(raised_before_donate + value, raised_after_donate);
+        assert.equal(balance_before_donate + value, balance_after_donate);
+        assert.equal(raised_after_donate, balance_after_donate);
     });
 
     it('Does not accept donation for campaign after deadline.', async() => {
@@ -107,7 +112,7 @@ contract('Fundraising Platform', accounts => {
         await increaseTime(DAY);
         await _contract.claimRaised(0, {from: firstAccount});
         let campaign = await _contract.campaigns.call(0);
-        assert.equal(campaign.raised.toNumber(), 0);
+        assert.equal(campaign.balance.toNumber(), 0);
     });
 
     it('Does not allow campaign owner to claim/withdraw funds before deadline', async() => {
