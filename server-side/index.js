@@ -10,6 +10,54 @@ let contractAddress = contractBuild.networks["5777"].address;
 let TheContract = new web3.eth.Contract(contractAbi, contractAddress);
 
 
+let campaignCategories = [
+    {
+        name: 'Animals',
+        description: 'Support animals and pets, humane societies, veterinary organizations and more.'
+    },
+    {
+        name: 'Arts and Culture',
+        description: 'Support art, theater, music, film and more.'
+    },
+    {
+        name: 'Community and Social Action',
+        description: 'Support community improvement projects, volunteer efforts, hunger relief, human and civil rights organizations and more.'
+    },
+    {
+        name: 'Crisis Relief',
+        description: 'Support people recovering from public crises or natural disasters. Help with supplies, medical bills and other needs.'
+    },
+    {
+        name: 'Education',
+        description: 'Help with school supplies, books, tuition and scholarships. You can also support education nonprofits promoting student organizations, job training, literacy programs and more.'
+    },
+    {
+        name: 'Environment',
+        description: 'Support environmental nonprofits to help preserve and protect natural resources.'
+    },
+    {
+        name: 'Faith',
+        description: 'Support religious nonprofits and organizations dedicated to interfaith issues.'
+    },
+    {
+        name: 'Funeral and Loss',
+        description: 'Support people experiencing the loss of a loved one by helping with burial, cremation or other end-of-life costs.'
+    },
+    {
+        name: 'Health and Medical',
+        description: 'Help with the costs of medical treatments, surgeries and injuries. You can also support health nonprofits funding disease research, treatment programs and more.'
+    },
+    {
+        name: 'Personal Emergency',
+        description: 'Support people recovering from personal emergencies like house fires, theft, or car accidents.'
+    },
+    {
+        name: 'Sports',
+        description: 'Support people and teams raising money for sports equipment, uniforms, travel costs related to competitions or camps and more.'
+    }
+];
+
+
 // enable cross origin
 app.use(cors());
 
@@ -51,6 +99,10 @@ app.get('/campaign', async(req, res, next) => {
                 result.push({
                     id: i,
                     name: web3.utils.hexToString(campaign.name),
+                    category: {
+                        id: campaign.category,
+                        ...(campaignCategories[campaign.category] || {})
+                    },
                     story: web3.utils.hexToString(campaign.story),
                     imageHash: web3.utils.hexToString(campaign.imageHash),
                     goal: campaign.goal.toString(),
@@ -79,6 +131,10 @@ app.get('/campaign/:id', async(req, res, next) => {
         res.json({
             id: params.id,
             name: web3.utils.hexToString(campaign.name),
+            category: {
+                id: campaign.category,
+                ...(campaignCategories[campaign.category] || {})
+            },
             story: web3.utils.hexToString(campaign.story),
             imageHash: web3.utils.hexToString(campaign.imageHash),
             goal: campaign.goal.toString(),
@@ -93,6 +149,17 @@ app.get('/campaign/:id', async(req, res, next) => {
         if(/invalid opcode/.test(error.message)) next(new Error('ID does not exist.'));
         else next(error);
     }
+});
+
+
+// get list of all categories
+app.get('/category', async(req, res) => {
+    res.json(campaignCategories.map((category, id) => {
+        return {
+            id,
+            ...category
+        };
+    }));
 });
 
 
