@@ -29,6 +29,7 @@ module.exports = function(deployer, network, accounts) {
         for(let i = 0; i < uploadedImages.length; i++) {
             await contract.createCampaign(
                 web3.utils.stringToHex(`My Campaign #${i + 1}`),
+                getRandomNumberIn(1, 8),
                 web3.utils.stringToHex(`Some story of campaign #${i + 1}`),
                 web3.utils.stringToHex(uploadedImages[i]),
                 web3.utils.toWei(getRandomGoal().toString(), 'ether'),

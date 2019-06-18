@@ -25,14 +25,14 @@ contract('Fundraising Platform', accounts => {
 
     it('Does allow anyone to create a campaign.', async() => {
         let beforeCount = (await _contract.ownerCampaignCount.call(secondAccount)).toNumber();
-        await _contract.createCampaign('0x4e', '0x4e', '0x4e', 100, 100, {from: secondAccount});
+        await _contract.createCampaign('0x4e', 0, '0x4e', '0x4e', 100, 100, {from: secondAccount});
         let afterCount = (await _contract.ownerCampaignCount.call(secondAccount)).toNumber();
         assert.ok(afterCount > beforeCount);
     });
 
     it('Does not allow to create campaign with empty name.', async() => {
         try {
-            await _contract.createCampaign('0x', '0x4e', '0x4e', 100, 100, {from: firstAccount});
+            await _contract.createCampaign('0x', 0, '0x4e', '0x4e', 100, 100, {from: firstAccount});
             assert.fail();
         }
         catch(error) {
@@ -42,7 +42,7 @@ contract('Fundraising Platform', accounts => {
 
     it('Does not allow to create campaign with 0 target amount.', async() => {
         try {
-            await _contract.createCampaign('0x4e', '0x4e', '0x4e', 0, 100, {from: firstAccount});
+            await _contract.createCampaign('0x4e', 0, '0x4e', '0x4e', 0, 100, {from: firstAccount});
             assert.fail();
         }
         catch(error) {
@@ -52,7 +52,7 @@ contract('Fundraising Platform', accounts => {
 
     it('Does not allow to create campaign with 0 duration.', async() => {
         try {
-            await _contract.createCampaign('0x4e', '0x4e', '0x4e', 100, 0, {from: firstAccount});
+            await _contract.createCampaign('0x4e', 0, '0x4e', '0x4e', 100, 0, {from: firstAccount});
             assert.fail();
         }
         catch(error) {
@@ -63,12 +63,12 @@ contract('Fundraising Platform', accounts => {
     it('Does keep track campaign count of each owner.', async() => {
         let a_before = (await _contract.ownerCampaignCount.call(firstAccount)).toNumber();
         let b_before = (await _contract.ownerCampaignCount.call(secondAccount)).toNumber();
-        await _contract.createCampaign('0x4e', '0x4e', '0x4e', 100, 100, {from: firstAccount});
-        await _contract.createCampaign('0x4e', '0x4e', '0x4e', 100, 100, {from: firstAccount});
+        await _contract.createCampaign('0x4e', 0, '0x4e', '0x4e', 100, 100, {from: firstAccount});
+        await _contract.createCampaign('0x4e', 0, '0x4e', '0x4e', 100, 100, {from: firstAccount});
         let a_after = (await _contract.ownerCampaignCount.call(firstAccount)).toNumber();
         assert.equal(a_before + 2, a_after);
 
-        await _contract.createCampaign('0x4e', '0x4e', '0x4e', 100, 100, {from: secondAccount});
+        await _contract.createCampaign('0x4e', 0, '0x4e', '0x4e', 100, 100, {from: secondAccount});
         let b_after = (await _contract.ownerCampaignCount.call(secondAccount)).toNumber();
         assert.equal(b_before + 1, b_after);
     });
@@ -78,7 +78,7 @@ contract('Fundraising Platform', accounts => {
     it('Does accept donation for campaign before deadline.', async() => {
         let value = 100;
 
-        await _contract.createCampaign('0x4e', '0x4e', '0x4e', 100, 100, {from: firstAccount});
+        await _contract.createCampaign('0x4e', 0, '0x4e', '0x4e', 100, 100, {from: firstAccount});
         let raised_before_donate = (await _contract.campaigns.call(0)).raised.toNumber();
         let balance_before_donate = (await _contract.campaigns.call(0)).balance.toNumber();
 
@@ -94,7 +94,7 @@ contract('Fundraising Platform', accounts => {
 
     it('Does not accept donation for campaign after deadline.', async() => {
         try {
-            await _contract.createCampaign('0x4e', '0x4e', '0x4e', 100, DAY, {from: firstAccount});
+            await _contract.createCampaign('0x4e', 0, '0x4e', '0x4e', 100, DAY, {from: firstAccount});
             await increaseTime(DAY);
             await _contract.donate(0, {from: secondAccount, value: 100});
             assert.fail();
@@ -107,7 +107,7 @@ contract('Fundraising Platform', accounts => {
 
     // Campaign Helper
     it('Does allow campaign owner to claim/withdraw funds after deadline', async() => {
-        await _contract.createCampaign('0x4e', '0x4e', '0x4e', 100, DAY, {from: firstAccount});
+        await _contract.createCampaign('0x4e', 0, '0x4e', '0x4e', 100, DAY, {from: firstAccount});
         await _contract.donate(0, {from: secondAccount, value: 100});
         await increaseTime(DAY);
         await _contract.withdrawBalance(0, {from: firstAccount});
@@ -117,7 +117,7 @@ contract('Fundraising Platform', accounts => {
 
     it('Does not allow campaign owner to claim/withdraw funds before deadline', async() => {
         try {
-            await _contract.createCampaign('0x4e', '0x4e', '0x4e', 100, DAY, {from: firstAccount});
+            await _contract.createCampaign('0x4e', 0, '0x4e', '0x4e', 100, DAY, {from: firstAccount});
             await _contract.donate(0, {from: secondAccount, value: 100});
             await _contract.withdrawBalance(0, {from: firstAccount});
             assert.fail();
@@ -129,7 +129,7 @@ contract('Fundraising Platform', accounts => {
 
     it('Does not allow non-owner of campaign to claim/withdraw funds', async() => {
         try {
-            await _contract.createCampaign('0x4e', '0x4e', '0x4e', 100, DAY, {from: firstAccount});
+            await _contract.createCampaign('0x4e', 0, '0x4e', '0x4e', 100, DAY, {from: firstAccount});
             await _contract.donate(0, {from: secondAccount, value: 100});
             await increaseTime(DAY);
             await _contract.withdrawBalance(0, {from: secondAccount});
@@ -142,7 +142,7 @@ contract('Fundraising Platform', accounts => {
 
     it('Does allow campaign owner to update campaign story', async() => {
         let newStoryValue = '0x48656c6c6f20576f6c726421';
-        await _contract.createCampaign('0x4e', '0x4e', '0x4e', 100, DAY, {from: firstAccount});
+        await _contract.createCampaign('0x4e', 0, '0x4e', '0x4e', 100, DAY, {from: firstAccount});
         await _contract.updateStory(0, newStoryValue, {from: firstAccount});
         let campaign = await _contract.campaigns.call(0);
         assert.equal(newStoryValue, campaign.story);
@@ -151,7 +151,7 @@ contract('Fundraising Platform', accounts => {
     it('Does not allow non-owner of campaign to update campaign story', async() => {
         try {
             let newStoryValue = '0x48656c6c6f20576f6c726421';
-            await _contract.createCampaign('0x4e', '0x4e', '0x4e', 100, DAY, {from: firstAccount});
+            await _contract.createCampaign('0x4e', 0, '0x4e', '0x4e', 100, DAY, {from: firstAccount});
             await _contract.updateStory(0, newStoryValue, {from: secondAccount});
             assert.fail();
         }
@@ -162,7 +162,7 @@ contract('Fundraising Platform', accounts => {
 
     it('Does allow campaign owner to update campaign image', async() => {
         let newStoryValue = '0x48656c6c6f20576f6c726421';
-        await _contract.createCampaign('0x4e', '0x4e', '0x4e', 100, DAY, {from: firstAccount});
+        await _contract.createCampaign('0x4e', 0, '0x4e', '0x4e', 100, DAY, {from: firstAccount});
         await _contract.updateImageHash(0, newStoryValue, {from: firstAccount});
         let campaign = await _contract.campaigns.call(0);
         assert.equal(newStoryValue, campaign.imageHash);
@@ -171,7 +171,7 @@ contract('Fundraising Platform', accounts => {
     it('Does not allow non-owner of campaign to update campaign image', async() => {
         try {
             let newStoryValue = '0x48656c6c6f20576f6c726421';
-            await _contract.createCampaign('0x4e', '0x4e', '0x4e', 100, DAY, {from: firstAccount});
+            await _contract.createCampaign('0x4e', 0, '0x4e', '0x4e', 100, DAY, {from: firstAccount});
             await _contract.updateImageHash(0, newStoryValue, {from: secondAccount});
             assert.fail();
         }
@@ -181,7 +181,7 @@ contract('Fundraising Platform', accounts => {
     });
 
     it('Does allow campaign owner to extend deadline before deadline', async() => {
-        await _contract.createCampaign('0x4e', '0x4e', '0x4e', 100, DAY, {from: firstAccount});
+        await _contract.createCampaign('0x4e', 0, '0x4e', '0x4e', 100, DAY, {from: firstAccount});
         let deadline_before = (await _contract.campaigns.call(0)).deadline.toNumber();
         await _contract.extendDeadline(0, 100, {from: firstAccount});
         let deadline_after = (await _contract.campaigns.call(0)).deadline.toNumber();
@@ -190,7 +190,7 @@ contract('Fundraising Platform', accounts => {
 
     it('Does not allow campaign owner to extend deadline after deadline', async() => {
         try {
-            await _contract.createCampaign('0x4e', '0x4e', '0x4e', 100, DAY, {from: firstAccount});
+            await _contract.createCampaign('0x4e', 0, '0x4e', '0x4e', 100, DAY, {from: firstAccount});
             await increaseTime(DAY);
             await _contract.extendDeadline(0, 100, {from: firstAccount});
             assert.fail();
@@ -202,7 +202,7 @@ contract('Fundraising Platform', accounts => {
 
     it('Does not allow non-owner of campaign to extend deadline', async() => {
         try {
-            await _contract.createCampaign('0x4e', '0x4e', '0x4e', 100, DAY, {from: firstAccount});
+            await _contract.createCampaign('0x4e', 0, '0x4e', '0x4e', 100, DAY, {from: firstAccount});
             await _contract.extendDeadline(0, 100, {from: secondAccount});
             assert.fail();
         }
@@ -212,16 +212,16 @@ contract('Fundraising Platform', accounts => {
     });
 
     it('Can get the list of campaigns owned by an owner', async() => {
-        await _contract.createCampaign('0x4e', '0x4e', '0x4e', 100, DAY, {from: firstAccount});
-        await _contract.createCampaign('0x4e', '0x4e', '0x4e', 100, DAY, {from: secondAccount});
+        await _contract.createCampaign('0x4e', 0, '0x4e', '0x4e', 100, DAY, {from: firstAccount});
+        await _contract.createCampaign('0x4e', 0, '0x4e', '0x4e', 100, DAY, {from: secondAccount});
         let list = await _contract.getCampaignsByOwner.call(firstAccount, {from: secondAccount});
         assert.equal(list.length, 1);
     });
 
     it('Can get the finished status of each campaigns', async() => {
-        await _contract.createCampaign('0x4e', '0x4e', '0x4e', 100, DAY, {from: firstAccount});
-        await _contract.createCampaign('0x4e', '0x4e', '0x4e', 100, DAY * 2, {from: secondAccount});
-        await _contract.createCampaign('0x4e', '0x4e', '0x4e', 100, DAY * 3, {from: thirdAccount});
+        await _contract.createCampaign('0x4e', 0, '0x4e', '0x4e', 100, DAY, {from: firstAccount});
+        await _contract.createCampaign('0x4e', 0, '0x4e', '0x4e', 100, DAY * 2, {from: secondAccount});
+        await _contract.createCampaign('0x4e', 0, '0x4e', '0x4e', 100, DAY * 3, {from: thirdAccount});
         await increaseTime(DAY);
         let list = await _contract.getCampaignsFinishStatus.call({from: secondAccount});
         assert.equal(list.length, 3);
@@ -233,26 +233,26 @@ contract('Fundraising Platform', accounts => {
 
     // Campaign Ownership
     it('Does allow anyone to see how many campaign does an owner have', async() => {
-        await _contract.createCampaign('0x4e', '0x4e', '0x4e', 100, DAY, {from: firstAccount});
+        await _contract.createCampaign('0x4e', 0, '0x4e', '0x4e', 100, DAY, {from: firstAccount});
         let count = await _contract.balanceOf.call(firstAccount, {from: secondAccount});
         assert.equal(count, 1);
     });
 
     it('Does allow anyone to see the owner of campaign.', async() => {
-        await _contract.createCampaign('0x4e', '0x4e', '0x4e', 100, 100, {from: firstAccount});
+        await _contract.createCampaign('0x4e', 0, '0x4e', '0x4e', 100, 100, {from: firstAccount});
         let firstCreatedCampaignOwner = await _contract.ownerOf.call(0);
         assert.equal(firstCreatedCampaignOwner, firstAccount);
     });
 
     it('Does allow campaign owner to transfer campaign ownership', async() => {
-        await _contract.createCampaign('0x4e', '0x4e', '0x4e', 100, DAY, {from: firstAccount});
+        await _contract.createCampaign('0x4e', 0, '0x4e', '0x4e', 100, DAY, {from: firstAccount});
         await _contract.transferFrom(firstAccount, secondAccount, 0, {from: firstAccount});
         let new_owner = await _contract.campaignToOwner.call(0);
         assert.equal(new_owner, secondAccount);
     });
 
     it('Does allow campaign owner approve an address to transfer campaign ownership', async() => {
-        await _contract.createCampaign('0x4e', '0x4e', '0x4e', 100, DAY, {from: firstAccount});
+        await _contract.createCampaign('0x4e', 0, '0x4e', '0x4e', 100, DAY, {from: firstAccount});
         await _contract.approve(thirdAccount, 0, {from: firstAccount});
         await _contract.transferFrom(firstAccount, secondAccount, 0, {from: thirdAccount});
         let new_owner = await _contract.campaignToOwner.call(0);
@@ -269,7 +269,7 @@ contract('Fundraising Platform', accounts => {
 
     it('Does not allow non-owner of campaign approve an address to transfer campaign ownership', async() => {
         try {
-            await _contract.createCampaign('0x4e', '0x4e', '0x4e', 100, DAY, {from: firstAccount});
+            await _contract.createCampaign('0x4e', 0, '0x4e', '0x4e', 100, DAY, {from: firstAccount});
             await _contract.approve(thirdAccount, 0, {from: secondAccount});
             assert.fail();
         }
@@ -280,7 +280,7 @@ contract('Fundraising Platform', accounts => {
 
     it('Does not allow non-owner of campaign or not approved address to transfer campaign ownership', async() => {
         try {
-            await _contract.createCampaign('0x4e', '0x4e', '0x4e', 100, DAY, {from: firstAccount});
+            await _contract.createCampaign('0x4e', 0, '0x4e', '0x4e', 100, DAY, {from: firstAccount});
             await _contract.transferFrom(firstAccount, secondAccount, 0, {from: thirdAccount});
             assert.fail();
         }
@@ -291,7 +291,7 @@ contract('Fundraising Platform', accounts => {
 
     it('Does not allow transfer campaign ownership if token did not match from', async() => {
         try {
-            await _contract.createCampaign('0x4e', '0x4e', '0x4e', 100, DAY, {from: firstAccount});
+            await _contract.createCampaign('0x4e', 0, '0x4e', '0x4e', 100, DAY, {from: firstAccount});
             await _contract.transferFrom(thirdAccount, secondAccount, 0, {from: firstAccount});
             assert.fail();
         }
@@ -302,7 +302,7 @@ contract('Fundraising Platform', accounts => {
 
     it('Does not allow transfer campaign ownership to 0 address', async() => {
         try {
-            await _contract.createCampaign('0x4e', '0x4e', '0x4e', 100, DAY, {from: firstAccount});
+            await _contract.createCampaign('0x4e', 0, '0x4e', '0x4e', 100, DAY, {from: firstAccount});
             await _contract.transferFrom(firstAccount, ZERO_ADDRESS, 0, {from: firstAccount});
             assert.fail();
         }
