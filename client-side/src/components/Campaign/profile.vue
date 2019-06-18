@@ -36,18 +36,25 @@
                             </div>
 
                             <div v-else>
+
+                                <!-- image -->
                                 <app-image-box :src="ipfsGateway + profile.imageHash" />
+
                                 <div class="p-4">
+
+                                    <!-- name and category -->
                                     <h1>{{ profile.name }}</h1>
                                     <p class="text-muted">{{ profile.category.name }}</p>
+
 
                                     <div class="pt-5">
                                         <h5>Story</h5>
                                         <div class="border-top pt-2">
-                                            <p>{{ profile.story }}</p>
+                                            <p style="white-space: pre-wrap">{{ profile.story }}</p>
                                         </div>
                                     </div>
 
+                                    <!-- category -->
                                     <div class="pt-5">
                                         <h5>Category</h5>
                                         <div class="border-top pt-2">
@@ -58,6 +65,7 @@
                                         </div>
                                     </div>
 
+                                    <!-- owner -->
                                     <div class="pt-5">
                                         <h5>Owner Address</h5>
                                         <div class="border-top pt-2">
