@@ -39,10 +39,7 @@
                                 <app-image-box :src="ipfsGateway + profile.imageHash" />
                                 <div class="p-4">
                                     <h1>{{ profile.name }}</h1>
-                                    <p class="text-muted">Category Name Here</p>
-
-
-
+                                    <p class="text-muted">{{ profile.category.name }}</p>
 
                                     <div class="pt-5">
                                         <h5>Story</h5>
@@ -52,18 +49,39 @@
                                     </div>
 
                                     <div class="pt-5">
-                                        <h5>Owner Address</h5>
+                                        <h5>Category</h5>
                                         <div class="border-top pt-2">
-                                            <p>{{ profile.owner }}</p>
+                                            <p>
+                                                <b>{{ profile.category.name }}</b>
+                                                <span> - {{ profile.category.description }}</span>
+                                            </p>
                                         </div>
                                     </div>
 
                                     <div class="pt-5">
+                                        <h5>Owner Address</h5>
+                                        <div class="border-top pt-2">
+                                            <div class="d-flex">
+                                                <div class="pr-2">
+                                                    <app-jazzicon :address="profile.owner" :diameter="40" />
+                                                </div>
+                                                <div class="d-flex align-items-center">
+                                                    <p class="m-0">
+                                                        <router-link :to="'/address/' + profile.owner">
+                                                            {{ profile.owner }}
+                                                        </router-link>
+                                                    </p>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+
+                                    <!--<div class="pt-5">
                                         <h5>Recent Donations</h5>
                                         <div class="border-top pt-2">
                                             <p>{{ profile }}</p>
                                         </div>
-                                    </div>
+                                    </div>-->
                                 </div>
                             </div>
                         </div>

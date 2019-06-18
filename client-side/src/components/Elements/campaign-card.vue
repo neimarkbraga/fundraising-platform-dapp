@@ -4,7 +4,7 @@
             <app-image-box :src="ipfsGateway + data.imageHash" />
             <div class="card-body">
                 <h5 class="card-title">{{ data.name }}</h5>
-                <p class="card-text">{{ data.story }}</p>
+                <p class="card-text text-muted">{{ data.category.name }}</p>
 
                 <div>
                     <div class="progress">

@@ -1,12 +1,12 @@
 <template>
     <div class="bg-well occupy-view">
-        <div v-if="user" class="container pb-5">
+        <div class="container pb-5">
             <div class="d-flex py-4">
                 <div class="pr-2">
-                    <app-jazzicon :address="user.address" :diameter="50" />
+                    <app-jazzicon :address="$route.params.address" :diameter="50" />
                 </div>
                 <div class="d-flex align-items-center">
-                    <h4 class="m-0">{{ user.address }}</h4>
+                    <h4 class="m-0">{{ $route.params.address }}</h4>
                 </div>
             </div>
 
