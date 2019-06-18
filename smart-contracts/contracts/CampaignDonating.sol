@@ -4,6 +4,8 @@ import "./CampaignFactory.sol";
 
 contract CampaignDonating is CampaignFactory {
 
+    event NewCampaignDonate(uint campaignId, uint value, uint totalRaised);
+
     modifier onlyFinished(uint _campaignId) {
         require(_isFinished(_campaignId));
         _;
@@ -21,5 +23,7 @@ contract CampaignDonating is CampaignFactory {
     function donate(uint _campaignId) payable public onlyNotFinished(_campaignId) {
         Campaign storage myCampaign = campaigns[_campaignId];
         myCampaign.raised = myCampaign.raised.add(msg.value);
+        myCampaign.balance = myCampaign.balance.add(msg.value);
+        emit NewCampaignDonate(_campaignId, msg.value, myCampaign.raised);
     }
 }

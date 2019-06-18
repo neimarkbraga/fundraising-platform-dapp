@@ -5,10 +5,14 @@ import "./CampaignOwnership.sol";
 
 contract FundraisingPlatform is CampaignOwnership, Ownable {
 
+    event NewPlatformDonation(uint value, uint totalReceived);
+    event WithdrawPlaformDonation(uint value);
+
     uint private receivedDonation;
 
     function donateToPlatform() payable public {
         receivedDonation = receivedDonation.add(msg.value);
+        emit NewPlatformDonation(msg.value, receivedDonation);
     }
 
     function getReceivedDonation() view public onlyOwner returns (uint) {
@@ -17,6 +21,7 @@ contract FundraisingPlatform is CampaignOwnership, Ownable {
 
     function withdrawReceivedDonation() public onlyOwner {
         msg.sender.transfer(receivedDonation);
+        emit WithdrawPlaformDonation(receivedDonation);
         receivedDonation = 0;
     }
 }
