@@ -63,7 +63,7 @@
 
 <script>
     import { mapGetters } from 'vuex';
-    const ethunit = require('ethjs-unit');
+    const web3utils = require('web3-utils');
 
     export default {
         props: ['profile'],
@@ -108,7 +108,7 @@
                 try {
                     let hash = await new Promise((resolve, reject) => {
                         Contract.donate(Number(profile.id), {
-                            value: ethunit.toWei(form.value.toString(), form.unit)
+                            value: web3utils.toWei(form.value.toString(), form.unit)
                         }, (error, result) => {
                             if(error) reject(error);
                             else resolve(result);

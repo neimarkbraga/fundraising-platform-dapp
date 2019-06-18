@@ -12,7 +12,7 @@ import AppImageBox from './components/Plugins/image-box';
 import AppAffix from './components/Plugins/affix';
 import AppJazzicon from 'vue-jazzicon';
 
-const ethunit = require('ethjs-unit');
+const web3utils = require('web3-utils');
 
 
 Vue.config.productionTip = false;
@@ -26,7 +26,7 @@ Vue.component('AppJazzicon', AppJazzicon);
 
 Vue.filter('fromWei', function (value, unit) {
     try {
-        return ethunit.fromWei(value, unit || 'ether');
+        return web3utils.fromWei(value, unit || 'ether');
     } catch (error) {
         return 'Convert Error';
     }

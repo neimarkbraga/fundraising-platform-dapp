@@ -32,6 +32,14 @@ let router = new Router({
             }
         },
         {
+            path: '/create',
+            component: resolve => {
+                require.ensure(['@/components/Create/index.vue'], () => {
+                    resolve(require('@/components/Create/index.vue'));
+                });
+            }
+        },
+        {
             path: '*',
             component: resolve => {
                 require.ensure(['@/components/Errors/404.vue'], () => {
