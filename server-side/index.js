@@ -103,7 +103,7 @@ app.get('/campaign', async(req, res, next) => {
                         id: campaign.category,
                         ...(campaignCategories[campaign.category] || {})
                     },
-                    story: web3.utils.hexToString(campaign.story),
+                    //story: web3.utils.hexToString(campaign.story),
                     imageHash: web3.utils.hexToString(campaign.imageHash),
                     goal: campaign.goal.toString(),
                     deadline: campaign.deadline.toString(),
