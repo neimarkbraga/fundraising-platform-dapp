@@ -40,6 +40,14 @@ let router = new Router({
             }
         },
         {
+            path: '/donate',
+            component: resolve => {
+                require.ensure(['@/components/Donate/index.vue'], () => {
+                    resolve(require('@/components/Donate/index.vue'));
+                });
+            }
+        },
+        {
             path: '*',
             component: resolve => {
                 require.ensure(['@/components/Errors/404.vue'], () => {
