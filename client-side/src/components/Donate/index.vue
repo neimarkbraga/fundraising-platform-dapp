@@ -72,7 +72,7 @@
                         </form>
                     </div>
                 </div>
-                <div class="col d-flex align-items-center justify-content-centerss">
+                <div class="col d-flex align-items-center justify-content-center">
                     <div class="d-flex">
                         <div class="pr-3">
                             <img src="../../assets/img/logo.png"
