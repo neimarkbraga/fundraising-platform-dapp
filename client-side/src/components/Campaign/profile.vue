@@ -47,12 +47,11 @@
                                     <p class="text-muted">{{ profile.category.name }}</p>
 
 
+                                    <!-- story -->
                                     <div class="pt-5">
-                                        <h5>Story</h5>
-                                        <div class="border-top pt-2">
-                                            <p style="white-space: pre-wrap">{{ profile.story }}</p>
-                                        </div>
+                                        <story-section :profile="profile" />
                                     </div>
+
 
                                     <!-- category -->
                                     <div class="pt-5">
@@ -169,6 +168,7 @@
     import { mapGetters } from 'vuex';
     import EventBus from '../../library/EventBus';
 
+    import StorySection from './profile/story-section';
     import DonateSection from './profile/donate-section';
     import WithdrawWidget from './profile/withdraw-widget';
 
@@ -225,18 +225,28 @@
                 if(profile && profile.id.toString() === data.campaignId.toString()) {
                     profile.balance = '0';
                 }
+            },
+            updateStoryEventHandler(data) {
+                let vm = this;
+                let profile = vm.profile;
+                if(profile && profile.id.toString() === data.campaignId.toString()) {
+                    profile.story = data.newStory;
+                }
             }
         },
         created() {
             this.loadProfile();
             EventBus.$on('NewCampaignDonate', this.newDonateEventHandler);
             EventBus.$on('WithdrawCampaignBalance', this.withdrawBalanceEventHandler);
+            EventBus.$on('UpdateCampaignStory', this.updateStoryEventHandler);
         },
         destroyed() {
             EventBus.$off('NewCampaignDonate', this.newDonateEventHandler);
             EventBus.$off('WithdrawCampaignBalance', this.withdrawBalanceEventHandler);
+            EventBus.$off('UpdateCampaignStory', this.updateStoryEventHandler);
         },
         components: {
+            StorySection,
             DonateSection,
             WithdrawWidget
         }

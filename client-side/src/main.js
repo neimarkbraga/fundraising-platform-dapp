@@ -97,4 +97,14 @@ if(FPContract) {
             });
         }
     });
+
+    FPContract.UpdateCampaignStory().watch((error, log) => {
+        if(!error) {
+            let args = log.args;
+            EventBus.$emit('UpdateCampaignStory', {
+                campaignId: args.campaignId.toNumber(),
+                newStory: web3utils.hexToString(args.newStory.toString())
+            });
+        }
+    });
 }
