@@ -154,4 +154,14 @@ if(FPContract) {
             });
         }
     });
+
+    FPContract.OwnershipTransferred().watch((error, log) => {
+        if(!error) {
+            let args = log.args;
+            EventBus.$emit('OwnershipTransferred', {
+                previousOwner: args.previousOwner.toString(),
+                newOwner: args.newOwner.toString()
+            });
+        }
+    });
 }

@@ -49,7 +49,7 @@
                     <div class="col">
                         <div class="bg-white rounded border shadow-sm">
                             <div class="px-4 py-3 border-bottom">
-                                <h5 class="m-0">Platform Ownership</h5>
+                                <h5 class="m-0">Transfer Platform Ownership</h5>
                             </div>
                             <div class="p-4">
                                 <ownership-section />
@@ -58,7 +58,7 @@
                     </div>
                 </div>
                 <div class="p-4 bg-white rounded border shadow-sm text-center" v-else>
-                    You are not allowed to access this page.
+                    You are not allowed to access this page. Only the platform owner can manage this page.
                 </div>
             </div>
 
@@ -71,6 +71,7 @@
     import { mapGetters } from 'vuex';
     import DonationsSection from './index-components/donations';
     import OwnershipSection from './index-components/ownership';
+    import EventBus from '../../library/EventBus';
 
     export default {
         computed: {
@@ -93,6 +94,11 @@
         },
         created() {
             this.reloadPlatformInfo();
+
+            EventBus.$on('OwnershipTransferred', this.reloadPlatformInfo);
+        },
+        destroyed() {
+            EventBus.$off('OwnershipTransferred', this.reloadPlatformInfo);
         },
         components: {
             DonationsSection,
