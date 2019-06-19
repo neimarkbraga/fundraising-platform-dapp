@@ -26,7 +26,7 @@ export default new Vuex.Store({
         user: createModule('user', {
             data: null
         }),
-        layout: createModule('config', {
+        config: createModule('config', {
             //ipfsGateway: 'https://ipfs.iamneimark.com/ipfs/',
             //ipfsGateway: 'https://gateway.ipfs.io/ipfs/',
             ipfsGateway: 'http://localhost:8080/ipfs/',
@@ -36,6 +36,14 @@ export default new Vuex.Store({
                 'finney',
                 'ether'
             ]
+        }),
+        platform: createModule('platform', {
+            info: null,
+            status: {
+                cancelToken: null,
+                isLoading: false,
+                errorMessage: ''
+            }
         })
     }
 });

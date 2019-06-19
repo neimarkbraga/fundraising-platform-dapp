@@ -48,6 +48,14 @@ let router = new Router({
             }
         },
         {
+            path: '/admin',
+            component: resolve => {
+                require.ensure(['@/components/Admin/index.vue'], () => {
+                    resolve(require('@/components/Admin/index.vue'));
+                });
+            }
+        },
+        {
             path: '*',
             component: resolve => {
                 require.ensure(['@/components/Errors/404.vue'], () => {

@@ -14,16 +14,47 @@ import AppJazzicon from 'vue-jazzicon';
 
 const web3utils = require('web3-utils');
 
-
+// configs
 Vue.config.productionTip = false;
+axios.defaults.baseURL = 'http://localhost:86';
+
+// prototypes
 Vue.prototype.$appUtil = util;
 Vue.prototype.$appFPContract = FPContract;
+Vue.prototype.$loadPlatformInfo = () => {
+    /*store.dispatch('user/data', {
+        address: address
+    });*/
+    let status = store.state.platform['platform/status'];
+    if(status.cancelToken) status.cancelToken.cancel();
+    setTimeout(async() => {
+        status.cancelToken = axios.CancelToken.source();
+        status.isLoading = true;
+        status.errorMessage = '';
+        store.dispatch('platform/status', status);
+        try {
+            let response = await axios.get('/platform/info');
+            store.dispatch('platform/info', response.data);
+        }
+        catch (error) {
+            if(!axios.isCancel(error)) status.errorMessage = util.getErrorMessage(error);
+        }
+        status.isLoading = false;
+        store.dispatch('platform/status', status);
+    });
+};
+Vue.prototype.$loadPlatformInfo();
 
+
+
+
+// components
 Vue.component('AppImageBox', AppImageBox);
 Vue.component('AppAffix', AppAffix);
 Vue.component('AppJazzicon', AppJazzicon);
 
 
+// filters
 Vue.filter('fromWei', function (value, unit) {
     try {
         return web3utils.fromWei(value, unit || 'ether');
@@ -37,16 +68,13 @@ Vue.filter('moment', function (value, format) {
     return momentDate.format(format);
 });
 
-axios.defaults.baseURL = 'http://localhost:86';
 
-
+// create vue instance
 new Vue({
     store,
     router,
     render: h => h(App),
 }).$mount('#app');
-
-
 
 
 // ensure user data
@@ -71,9 +99,9 @@ let updateCurrentUser = () => {
         currentUser = null;
     }
 };
-
 updateCurrentUser();
 setInterval(updateCurrentUser, 500);
+
 
 // listen to contract events
 if(FPContract) {
