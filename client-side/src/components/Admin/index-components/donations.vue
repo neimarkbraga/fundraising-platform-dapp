@@ -45,6 +45,8 @@
 </template>
 
 <script>
+    import EventBus from '../../../library/EventBus';
+
     export default {
         data() {
             return {
@@ -71,7 +73,7 @@
                             else resolve(result);
                         });
                     });
-                    this.value = data.toString();
+                    this.value = (data || 0).toString();
                 }
                 catch (error) {
                     status.errorMessage = this.$appUtil.getErrorMessage(error);
@@ -97,10 +99,23 @@
                     status.errorMessage = this.$appUtil.getErrorMessage(error);
                 }
                 status.isWithdrawing = false;
+            },
+            withdrawDonationEventHandler() {
+                this.loadReceivedDonations();
+            },
+            newDonationEventHandler(data) {
+                this.value = data.totalReceived;
             }
         },
         created() {
             this.loadReceivedDonations();
+
+            EventBus.$on('WithdrawPlatformDonation', this.withdrawDonationEventHandler);
+            EventBus.$on('NewPlatformDonation', this.newDonationEventHandler);
+        },
+        destroyed() {
+            EventBus.$off('WithdrawPlatformDonation', this.withdrawDonationEventHandler);
+            EventBus.$off('NewPlatformDonation', this.newDonationEventHandler);
         }
     }
 </script>

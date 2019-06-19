@@ -135,4 +135,23 @@ if(FPContract) {
             });
         }
     });
+
+    FPContract.NewPlatformDonation().watch((error, log) => {
+        if(!error) {
+            let args = log.args;
+            EventBus.$emit('NewPlatformDonation', {
+                value: args.value.toString(),
+                totalReceived: args.totalReceived.toString()
+            });
+        }
+    });
+
+    FPContract.WithdrawPlatformDonation().watch((error, log) => {
+        if(!error) {
+            let args = log.args;
+            EventBus.$emit('WithdrawPlatformDonation', {
+                value: args.value.toString()
+            });
+        }
+    });
 }
