@@ -21,7 +21,7 @@
             <select class="form-control"
                     @change="$emit('input', selected)"
                     v-model="selected">
-                <option :value="id" v-for="(category, id) in categories">{{ category.name }}</option>
+                <option :value="id" v-for="(category, id) in categories" :key="id">{{ category.name }}</option>
             </select>
             <small v-if="showDescription && selectedCategory && selectedCategory.description" class="form-text text-muted">{{ selectedCategory.description }}</small>
         </div>

@@ -17,6 +17,7 @@
                        v-for="option in campaigns.finishedOptions"
                        @click.prevent="setCampaignsQueryFinished(option.value)"
                        :class="{active: campaigns.query.finished === option.value }"
+                       :key="option.value"
                        href="#">{{ option.name }}</a>
                 </nav>
 
@@ -38,13 +39,15 @@
                 <div v-else>
 
                     <div class="row" v-if="campaigns.status.isLoading">
-                        <div class="col-6 col-md-4 mt-4" v-for="n in 6">
+                        <div class="col-6 col-md-4 mt-4" v-for="n in 6" :key="n">
                             <app-campaign-card />
                         </div>
                     </div>
 
                     <div class="row" v-else>
-                        <div class="col-6 col-md-4 mt-4" v-for="campaign in campaigns.result">
+                        <div class="col-6 col-md-4 mt-4"
+                             v-for="campaign in campaigns.result"
+                             :key="campaign.id">
                             <a :href="'#/campaign/' + campaign.id"
                                style="text-decoration: none"
                                class="d-block text-body">

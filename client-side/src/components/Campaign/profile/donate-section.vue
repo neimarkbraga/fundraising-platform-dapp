@@ -17,7 +17,7 @@
                         <div class="input-group-append">
                             <select class="btn btn-outline-secondary"
                                     v-model="form.unit">
-                                <option v-for="unit in ethUnits">{{ unit }}</option>
+                                <option v-for="unit in ethUnits" :key="unit">{{ unit }}</option>
                             </select>
                         </div>
                     </div>

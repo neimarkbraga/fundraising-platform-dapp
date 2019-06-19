@@ -73,7 +73,7 @@
                                     <div class="input-group-append">
                                         <select class="btn btn-outline-secondary"
                                                 v-model="form.goalUnit">
-                                            <option v-for="unit in ethUnits">{{ unit }}</option>
+                                            <option v-for="unit in ethUnits" :key="unit">{{ unit }}</option>
                                         </select>
                                     </div>
                                 </div>
@@ -98,7 +98,7 @@
                                     <div class="col-6">
                                         <div class="input-group input-group-sm">
                                             <select class="form-control" v-model="form.duration.hours">
-                                                <option :value="n - 1" v-for="n in 24">{{ n - 1 }}</option>
+                                                <option :value="n - 1" v-for="n in 24" :key="n">{{ n - 1 }}</option>
                                             </select>
                                             <div class="input-group-append">
                                                 <span class="input-group-text">Hours</span>
@@ -111,7 +111,7 @@
                                     <div class="col-6">
                                         <div class="input-group input-group-sm">
                                             <select class="form-control" v-model="form.duration.minutes">
-                                                <option :value="n - 1" v-for="n in 60">{{ n - 1 }}</option>
+                                                <option :value="n - 1" v-for="n in 60" :key="n">{{ n - 1 }}</option>
                                             </select>
                                             <div class="input-group-append">
                                                 <span class="input-group-text">Minutes</span>
@@ -121,7 +121,7 @@
                                     <div class="col-6">
                                         <div class="input-group input-group-sm">
                                             <select class="form-control" v-model="form.duration.seconds">
-                                                <option :value="n - 1" v-for="n in 60">{{ n - 1 }}</option>
+                                                <option :value="n - 1" v-for="n in 60" :key="n">{{ n - 1 }}</option>
                                             </select>
                                             <div class="input-group-append">
                                                 <span class="input-group-text">Seconds</span>
