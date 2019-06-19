@@ -1,7 +1,10 @@
 <template>
     <div class="bg-well occupy-view">
-        <div class="container py-5">
+        <div class="container pb-5">
 
+            <div class="py-4">
+                <h3 class="m-0">Admin Dashboard</h3>
+            </div>
 
             <div v-if="platformInfoStatus.isLoading || platformInfoStatus.errorMessage">
 
@@ -31,9 +34,31 @@
                 </div>
             </div>
 
-            <div v-else class="bg-white rounded border shadow-sm">
-                <div class="p-4">
-                    {{ platformInfo }}
+            <div v-else class="">
+                <div v-if="isPlatformOwner" class="row">
+                    <div class="col">
+                        <div class="bg-white rounded border shadow-sm">
+                            <div class="px-4 py-3 border-bottom">
+                                <h5 class="m-0">Received Donations</h5>
+                            </div>
+                            <div class="p-4">
+                                <donations-section />
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col">
+                        <div class="bg-white rounded border shadow-sm">
+                            <div class="px-4 py-3 border-bottom">
+                                <h5 class="m-0">Platform Ownership</h5>
+                            </div>
+                            <div class="p-4">
+                                <ownership-section />
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="p-4 bg-white rounded border shadow-sm text-center" v-else>
+                    You are not allowed to access this page.
                 </div>
             </div>
 
@@ -44,6 +69,8 @@
 
 <script>
     import { mapGetters } from 'vuex';
+    import DonationsSection from './index-components/donations';
+    import OwnershipSection from './index-components/ownership';
 
     export default {
         computed: {
@@ -66,6 +93,10 @@
         },
         created() {
             this.reloadPlatformInfo();
+        },
+        components: {
+            DonationsSection,
+            OwnershipSection
         }
     }
 </script>
