@@ -6,7 +6,7 @@ import "./CampaignOwnership.sol";
 contract FundraisingPlatform is CampaignOwnership, Ownable {
 
     event NewPlatformDonation(uint value, uint totalReceived);
-    event WithdrawPlaformDonation(uint value);
+    event WithdrawPlatformDonation(uint value);
 
     uint private receivedDonation;
 
@@ -21,7 +21,7 @@ contract FundraisingPlatform is CampaignOwnership, Ownable {
 
     function withdrawReceivedDonation() public onlyOwner {
         msg.sender.transfer(receivedDonation);
-        emit WithdrawPlaformDonation(receivedDonation);
+        emit WithdrawPlatformDonation(receivedDonation);
         receivedDonation = 0;
     }
 }
