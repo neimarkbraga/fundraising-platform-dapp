@@ -164,4 +164,15 @@ if(FPContract) {
             });
         }
     });
+
+    FPContract.Transfer().watch((error, log) => {
+        if(!error) {
+            let args = log.args;
+            EventBus.$emit('Transfer', {
+                from: args._from.toString(),
+                to: args._to.toString(),
+                campaignId: args._tokenId.toNumber()
+            });
+        }
+    });
 }

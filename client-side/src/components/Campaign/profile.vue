@@ -66,21 +66,7 @@
 
                                     <!-- owner -->
                                     <div class="pt-5">
-                                        <h5>Owner Address</h5>
-                                        <div class="border-top pt-2">
-                                            <div class="d-flex">
-                                                <div class="pr-2">
-                                                    <app-jazzicon :address="profile.owner" :diameter="40" />
-                                                </div>
-                                                <div class="d-flex align-items-center">
-                                                    <p class="m-0">
-                                                        <router-link :to="'/address/' + profile.owner">
-                                                            {{ profile.owner }}
-                                                        </router-link>
-                                                    </p>
-                                                </div>
-                                            </div>
-                                        </div>
+                                        <owner-section :profile="profile" />
                                     </div>
 
                                     <!--<div class="pt-5">
@@ -169,6 +155,7 @@
     import EventBus from '../../library/EventBus';
 
     import StorySection from './profile/story-section';
+    import OwnerSection from './profile/owner-section';
     import DonateSection from './profile/donate-section';
     import WithdrawWidget from './profile/withdraw-widget';
 
@@ -232,6 +219,13 @@
                 if(profile && profile.id.toString() === data.campaignId.toString()) {
                     profile.story = data.newStory;
                 }
+            },
+            transferEventHandler(data) {
+                let vm = this;
+                let profile = vm.profile;
+                if(profile && profile.id.toString() === data.campaignId.toString()) {
+                    profile.owner = data.to;
+                }
             }
         },
         created() {
@@ -239,14 +233,17 @@
             EventBus.$on('NewCampaignDonate', this.newDonateEventHandler);
             EventBus.$on('WithdrawCampaignBalance', this.withdrawBalanceEventHandler);
             EventBus.$on('UpdateCampaignStory', this.updateStoryEventHandler);
+            EventBus.$on('Transfer', this.transferEventHandler);
         },
         destroyed() {
             EventBus.$off('NewCampaignDonate', this.newDonateEventHandler);
             EventBus.$off('WithdrawCampaignBalance', this.withdrawBalanceEventHandler);
             EventBus.$off('UpdateCampaignStory', this.updateStoryEventHandler);
+            EventBus.$off('Transfer', this.transferEventHandler);
         },
         components: {
             StorySection,
+            OwnerSection,
             DonateSection,
             WithdrawWidget
         }
