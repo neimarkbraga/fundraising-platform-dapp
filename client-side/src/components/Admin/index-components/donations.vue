@@ -1,19 +1,21 @@
 <template>
     <div>
         <div class="text-center">
-            <h2 class="m-0">
+            <div class="d-flex align-items-center" style="min-height: 100px">
+                <h2 class="m-0 w-100">
                 <span v-if="status.isGettingValue" class="loader-ellipsis">
                     <span></span>
                     <span></span>
                     <span></span>
                     <span></span>
                 </span>
-                <span v-else>{{ value | fromWei }}</span>
-                <img src="../../../assets/img/ethereum.png"
-                     alt="ETH"
-                     class="mb-1"
-                     style="width: 1em;">
-            </h2>
+                    <span v-else>{{ value | fromWei }}</span>
+                    <img src="../../../assets/img/ethereum.png"
+                         alt="ETH"
+                         class="mb-1"
+                         style="width: 1em;">
+                </h2>
+            </div>
 
 
             <div class="py-2">

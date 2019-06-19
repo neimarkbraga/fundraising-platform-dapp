@@ -2,17 +2,19 @@
     <div>
         <form @submit.prevent="transfer">
             <fieldset :disabled="status.isLoading">
-                <div class="form-group">
-                    <label>New Owner Address</label>
-                    <input type="text"
-                           class="form-control"
-                           v-model="form.newOwner"
-                           required="required"
-                           placeholder="New Owner Address" />
+                <div style="min-height: 100px">
+                    <div class="form-group m-0">
+                        <label>New Owner Address</label>
+                        <input type="text"
+                               class="form-control"
+                               v-model="form.newOwner"
+                               required="required"
+                               placeholder="New Owner Address" />
+                    </div>
                 </div>
 
 
-                <div class="pb-2">
+                <div class="py-2">
                     <!-- error message -->
                     <div v-if="status.errorMessage"
                          style="overflow: auto"
@@ -34,8 +36,7 @@
                     </div>
                 </div>
 
-                <button type="submit"
-                        class="btn btn-lg btn-primary w-100">
+                <button type="submit" class="btn btn-lg btn-primary w-100">
                     <span v-if="status.isLoading" class="loader-ellipsis">
                         <span></span>
                         <span></span>
