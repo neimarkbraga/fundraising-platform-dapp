@@ -181,6 +181,19 @@ app.get('/participant/:address', async(req, res, next) => {
 });
 
 
+// get platform details
+app.get('/platform/info', async(req, res, next) => {
+    try {
+        res.json({
+            owner: await TheContract.methods.owner.call()
+        });
+    }
+    catch (error) {
+        next(error);
+    }
+});
+
+
 // handle error
 app.use((error, req, res, next) => {
     res.status(500);
