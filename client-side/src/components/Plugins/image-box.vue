@@ -45,7 +45,7 @@
                 if(src) {
                     this.isLoading = true;
                     this.image.src = src;
-                }
+                } else this.image.src = '';
             }
         },
         created() {
@@ -59,6 +59,9 @@
                 vm.isLoading = false;
             };
             vm.loadImage(this.src);
+        },
+        destroyed() {
+            this.image.src = '';
         }
     }
 </script>

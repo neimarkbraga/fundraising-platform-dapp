@@ -28,8 +28,8 @@ export default new Vuex.Store({
         }),
         config: createModule('config', {
             //ipfsGateway: 'https://ipfs.iamneimark.com/ipfs/',
-            //ipfsGateway: 'https://gateway.ipfs.io/ipfs/',
-            ipfsGateway: 'http://localhost:8080/ipfs/',
+            ipfsGateway: 'https://gateway.ipfs.io/ipfs/',
+            //ipfsGateway: 'http://localhost:8080/ipfs/',
             ethUnits: [
                 'wei',
                 'gwei',
