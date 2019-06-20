@@ -3,6 +3,7 @@
         <app-header />
         <main>
             <router-view :key="$route.fullPath" />
+            <settings-bubble />
         </main>
         <app-footer />
     </div>
@@ -11,12 +12,14 @@
 <script>
     import AppHeader from '@/components/Elements/header.vue';
     import AppFooter from '@/components/Elements/footer.vue';
+    import SettingsBubble from '@/components/Elements/settings-bubble.vue';
 
     export default {
         name: 'app',
         components: {
             AppHeader,
-            AppFooter
+            AppFooter,
+            SettingsBubble
         }
     }
 </script>
