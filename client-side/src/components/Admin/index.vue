@@ -69,8 +69,8 @@
 
 <script>
     import { mapGetters } from 'vuex';
-    import DonationsSection from './index-components/donations';
-    import OwnershipSection from './index-components/ownership';
+    import DonationsSection from './index/donations';
+    import OwnershipSection from './index/ownership';
     import EventBus from '../../library/EventBus';
 
     export default {
