@@ -115,7 +115,7 @@
                         });
                     });
                     form.value = 0;
-                    status.successMessage = `Thank You! Your transaction has been successfully submitted. Here is your tx hash: ${hash}`;
+                    status.successMessage = `Transaction Sent. Thank You! Raised value will update if transaction is successful after being mined. Your Tx Hash is: ${hash}`;
                 }
                 catch (error) {
                     status.errorMessage = vm.$appUtil.getErrorMessage(error);

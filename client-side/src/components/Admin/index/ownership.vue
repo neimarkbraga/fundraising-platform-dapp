@@ -84,7 +84,7 @@
                         });
                     });
                     form.newOwner = '';
-                    status.successMessage = `Transaction submitted! Your transaction hash is: ${hash}`;
+                    status.successMessage = `Transaction Sent! Ownership will update if transaction is successful after being mined. Your Tx Hash is: ${hash}`;
 
                 }
                 catch (error) {

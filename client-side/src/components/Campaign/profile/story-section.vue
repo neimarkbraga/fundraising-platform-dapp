@@ -126,7 +126,7 @@
                             else resolve(result);
                         });
                     });
-                    status.successMessage = `Transaction Sent! Changes will appear once the transaction is mined. Your Tx Hash is ${hash}`;
+                    status.successMessage = `Transaction Sent! Story will update if transaction is successful after being mined. Your Tx Hash is: ${hash}`;
                     this.setUpdateMode(false);
                 }
                 catch (error) {

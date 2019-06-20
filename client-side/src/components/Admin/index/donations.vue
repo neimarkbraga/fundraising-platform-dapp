@@ -95,7 +95,7 @@
                             else resolve(result);
                         });
                     });
-                    status.successMessage = `Transaction submitted! Your transaction hash is: ${hash}`;
+                    status.successMessage = `Transaction Sent! Balance will update if transaction is successful after being mined. Your Tx Hash is: ${hash}`;
                 }
                 catch(error) {
                     status.errorMessage = this.$appUtil.getErrorMessage(error);

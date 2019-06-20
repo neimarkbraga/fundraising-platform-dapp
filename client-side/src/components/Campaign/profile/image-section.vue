@@ -163,7 +163,7 @@
                             else resolve(result);
                         });
                     });
-                    status.successMessage = `Transaction sent! Image will update if transaction is successful after being mined. Your Tx Hash is ${hash}`;
+                    status.successMessage = `Transaction Sent! Image will update if transaction is successful after being mined. Your Tx Hash is: ${hash}`;
                     this.setUpdateMode(false);
                 }
                 catch (error) {

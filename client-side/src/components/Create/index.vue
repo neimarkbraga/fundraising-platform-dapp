@@ -283,7 +283,7 @@
                     form.duration.minutes = 0;
                     form.duration.seconds = 0;
                     vm.setFormImageFile(null);
-                    status.successMessage = `Your transaction has been successfully submitted. Here is your tx hash: ${hash}`;
+                    status.successMessage = `Transaction Sent! Campaign will be accessible if transaction is successful after being mined. Your Tx Hash is: ${hash}`;
                 }
                 catch (error) {
                     status.errorMessage = vm.$appUtil.getErrorMessage(error);
