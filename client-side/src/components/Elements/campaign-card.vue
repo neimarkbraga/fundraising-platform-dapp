@@ -1,7 +1,17 @@
 <template>
     <div class="card shadow-sm" style="overflow: hidden;">
         <div v-if="data">
-            <app-image-box :src="ipfsGateway + data.imageHash" />
+
+            <div class="position-relative">
+                <app-image-box :src="ipfsGateway + data.imageHash" />
+
+                <div class="position-absolute rounded shadow-sm px-1 text-white"
+                     :class="data.finished? 'bg-success' : 'bg-warning'"
+                     style="top: 0.5em; right: 0.5em; font-size: 0.7em;">
+                    {{ data.finished? 'Done' : 'On-going' }}
+                </div>
+            </div>
+
             <div class="card-body">
                 <h5 class="card-title">{{ data.name }}</h5>
                 <p class="card-text text-muted">{{ data.category.name }}</p>
