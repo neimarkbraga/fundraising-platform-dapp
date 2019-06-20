@@ -106,6 +106,7 @@
                 status.errorMessage = '';
                 status.successMessage = '';
                 try {
+                    if(form.value <= 0) throw new Error('Empty donation value.');
                     let hash = await new Promise((resolve, reject) => {
                         Contract.donate(Number(profile.id), {
                             value: web3utils.toWei(form.value.toString(), form.unit)
