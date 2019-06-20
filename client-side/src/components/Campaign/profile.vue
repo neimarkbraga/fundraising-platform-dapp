@@ -74,6 +74,12 @@
                                     <div class="pt-5">
                                         <owner-section :profile="profile" />
                                     </div>
+
+
+                                    <!-- deadline -->
+                                    <div class="pt-5">
+                                        <deadline-section :profile="profile" />
+                                    </div>
                                 </div>
                             </div>
                         </div>
@@ -157,6 +163,7 @@
     import StorySection from './profile/story-section';
     import OwnerSection from './profile/owner-section';
     import DonateSection from './profile/donate-section';
+    import DeadlineSection from './profile/deadline-section';
     import WithdrawWidget from './profile/withdraw-widget';
 
 
@@ -233,6 +240,14 @@
                 if(profile && profile.id.toString() === data.campaignId.toString()) {
                     profile.imageHash = data.newImageHash;
                 }
+            },
+            extendDeadlineEventHandler(data) {
+                let vm = this;
+                let profile = vm.profile;
+                if(profile && profile.id.toString() === data.campaignId.toString()) {
+                    profile.deadlineEpoch = data.newDeadline;
+                    profile.deadlineDate = new Date(data.newDeadline.toNumber() * 1000).toISOString()
+                }
             }
         },
         created() {
@@ -242,6 +257,7 @@
             EventBus.$on('UpdateCampaignStory', this.updateStoryEventHandler);
             EventBus.$on('Transfer', this.transferEventHandler);
             EventBus.$on('UpdateCampaignImageHash', this.updateImageHashEventHandler);
+            EventBus.$on('ExtendCampaignDeadline', this.extendDeadlineEventHandler);
         },
         destroyed() {
             EventBus.$off('NewCampaignDonate', this.newDonateEventHandler);
@@ -249,12 +265,14 @@
             EventBus.$off('UpdateCampaignStory', this.updateStoryEventHandler);
             EventBus.$off('Transfer', this.transferEventHandler);
             EventBus.$off('UpdateCampaignImageHash', this.updateImageHashEventHandler);
+            EventBus.$on('ExtendCampaignDeadline', this.extendDeadlineEventHandler);
         },
         components: {
             ImageSection,
             StorySection,
             OwnerSection,
             DonateSection,
+            DeadlineSection,
             WithdrawWidget
         }
     }

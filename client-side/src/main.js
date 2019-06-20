@@ -185,4 +185,15 @@ if(FPContract) {
             });
         }
     });
+
+    FPContract.ExtendCampaignDeadline().watch((error, log) => {
+        if(!error) {
+            let args = log.args;
+            EventBus.$emit('ExtendCampaignDeadline', {
+                campaignId: args.campaignId.toNumber(),
+                duration: args.duration.toString(),
+                newDeadline: args.newDeadline.toString()
+            });
+        }
+    });
 }
