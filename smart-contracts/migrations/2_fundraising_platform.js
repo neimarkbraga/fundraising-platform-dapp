@@ -18,19 +18,22 @@ module.exports = function(deployer, network, accounts) {
         };
 
         let uploadedImages = [
-            'QmYF5hdefacCZMwEYGH3hroiYpCWEehaq6azygLEHzUDtz',
-            'QmYJqcZF9kssfvwguN131Unu4yKmxLzKfEKtwSULkpMaa5',
-            'QmPPpQ39pPhyX7fmAKgviYYK2ajjHZs8VHAxtYVdim1sGJ',
-            'QmZbF6BdmNkhqCaxwvu8ZnVuPNddcg5u29jRo5UJbMzsry',
-            'QmfLijdgjvfoP5rcCMh7ktkAcUXRyNj39kvKiGWrT99Q9B',
-            'QmWqbVev7DodVif3Cm7awebekX6f1fsW4Lr51ZESybshJT',
-            'QmaTwAxqU7NZ2Y5KQ8Zf5qK5DsGEUiDNYyvXBjoA26YHeb'
+            'QmcBgiRY5LSHPe8v7i6Ma2QfeLMErWMyAoR3GCHV5KvdgM',
+            'Qmc634GS8RoHm8eBpYSaBx5gJFveXmr2oG4XTdMUbtaj84',
+            'QmUDgdPfttmjtSCyDpiZh9RXygZJHW5VzW8iZVdhquQ6Ko',
+            'QmZSLcgcdTxNxkfEmGQk8UD2MdKTirKH6iVikqUnVFkTnJ',
+            'QmZjPHZXj4eVowVEt8QtzjoyiWP1zi9vxb3Zis18fMUA1p',
+            'Qmd4Fz51YoJeA78oRFWydGKRTsmzDeuQaALb4FRcdbkwVK',
+            'QmRm41kZtsKW4Q8yegCb3fcDUCp9KbawHzn5Z5m55QenNA',
+            'QmWhzXgFBp69YvtnA7U8dTPzJxXPKA782zUAqVWv1L551r',
+            'QmWgngdqBdmiXdGxJLcs7UB3LyFhk1EDfmkpYZCf9MXkFz',
+            'QmQakzMNwrmBjDfMZZyD6rzRsn4vVUSziZRn5QSpHtwSUZ'
         ];
         for(let i = 0; i < uploadedImages.length; i++) {
             await contract.createCampaign(
-                web3.utils.stringToHex(`My Campaign #${i + 1}`),
+                web3.utils.stringToHex(`Test Campaign #${i + 1}`),
                 getRandomNumberIn(1, 8),
-                web3.utils.stringToHex(`Some story of campaign #${i + 1}`),
+                web3.utils.stringToHex(`Some story of test campaign #${i + 1}`),
                 web3.utils.stringToHex(uploadedImages[i]),
                 web3.utils.toWei(getRandomGoal().toString(), 'ether'),
                 getRandomNumberIn(1, 10) * HOUR,
