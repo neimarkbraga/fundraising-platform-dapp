@@ -1,14 +1,18 @@
 <template>
     <div class="bg-well occupy-view">
         <div class="container py-5" style="max-width: 700px">
-
             <div class="bg-white rounded shadow-sm">
+
+                <!-- title -->
                 <div class="px-4 py-3 border-bottom">
                     <h3 class="m-0">Create a Campaign</h3>
                 </div>
+
+                <!-- content -->
                 <div class="p-4">
 
-                    <form @submit.prevent="submitForm">
+                    <!-- create form -->
+                    <form v-if="user" @submit.prevent="submitForm">
                         <fieldset :disabled="status.isLoading">
 
                             <!-- display image -->
@@ -131,7 +135,7 @@
                                 </div>
                             </div>
 
-                            <!-- alert and submit -->
+                            <!-- alert messages -->
                             <div class="py-3">
 
                                 <!-- error message -->
@@ -155,6 +159,7 @@
                                 </div>
                             </div>
 
+                            <!-- submit button -->
                             <button type="submit" class="btn btn-lg btn-primary w-100">
                                 <span v-if="status.isLoading" class="loader-ellipsis">
                                     <span></span>
@@ -166,6 +171,12 @@
                             </button>
                         </fieldset>
                     </form>
+
+                    <!-- require metamask alert -->
+                    <div v-else class="text-danger">
+                        <h5>No Metamask Account Found</h5>
+                        <p>Please make sure you installed metamask on your browser to make transactions in this app.</p>
+                    </div>
                 </div>
             </div>
 
@@ -174,7 +185,7 @@
 </template>
 
 <script>
-    import IpfsClient from 'ipfs-http-client';
+    import ipfs from '../../library/ipfs';
     import AppSelectCategory from '../Elements/select-category';
     import { mapGetters } from 'vuex';
 
@@ -182,8 +193,6 @@
     const MINUTE = 60;
     const HOUR = MINUTE * 60;
     const DAY = HOUR * 24;
-
-    let ipfs = IpfsClient('localhost', '5001');
 
     export default {
         data() {
