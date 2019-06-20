@@ -6,6 +6,8 @@
                 <!-- main content -->
                 <div class="col-8">
                     <div class="bg-white rounded shadow-sm" style="overflow: hidden">
+
+                        <!-- has error -->
                         <div v-if="status.errorMessage">
                             <div class="p-4 d-flex">
                                 <div class="pr-4">
@@ -26,25 +28,28 @@
                             </div>
                         </div>
 
+                        <!-- no error -->
                         <div v-else>
+
+                            <!-- loading -->
                             <div v-if="status.isLoading">
                                 <app-image-box class="bg-muted" />
-
-                                <div class="p-4 text-center">
-
-                                </div>
+                                <div class="p-4 text-center"></div>
                             </div>
 
+                            <!-- ready -->
                             <div v-else>
 
                                 <!-- image -->
-                                <app-image-box :src="ipfsGateway + profile.imageHash" />
+                                <image-section :profile="profile" />
 
                                 <div class="p-4">
 
                                     <!-- name and category -->
-                                    <h1>{{ profile.name }}</h1>
-                                    <p class="text-muted">{{ profile.category.name }}</p>
+                                    <div>
+                                        <h1>{{ profile.name }}</h1>
+                                        <p class="text-muted">{{ profile.category.name }}</p>
+                                    </div>
 
 
                                     <!-- story -->
@@ -64,17 +69,11 @@
                                         </div>
                                     </div>
 
+
                                     <!-- owner -->
                                     <div class="pt-5">
                                         <owner-section :profile="profile" />
                                     </div>
-
-                                    <!--<div class="pt-5">
-                                        <h5>Recent Donations</h5>
-                                        <div class="border-top pt-2">
-                                            <p>{{ profile }}</p>
-                                        </div>
-                                    </div>-->
                                 </div>
                             </div>
                         </div>
@@ -154,6 +153,7 @@
     import { mapGetters } from 'vuex';
     import EventBus from '../../library/EventBus';
 
+    import ImageSection from './profile/image-section';
     import StorySection from './profile/story-section';
     import OwnerSection from './profile/owner-section';
     import DonateSection from './profile/donate-section';
@@ -226,6 +226,13 @@
                 if(profile && profile.id.toString() === data.campaignId.toString()) {
                     profile.owner = data.to;
                 }
+            },
+            updateImageHashEventHandler(data) {
+                let vm = this;
+                let profile = vm.profile;
+                if(profile && profile.id.toString() === data.campaignId.toString()) {
+                    profile.imageHash = data.newImageHash;
+                }
             }
         },
         created() {
@@ -234,14 +241,17 @@
             EventBus.$on('WithdrawCampaignBalance', this.withdrawBalanceEventHandler);
             EventBus.$on('UpdateCampaignStory', this.updateStoryEventHandler);
             EventBus.$on('Transfer', this.transferEventHandler);
+            EventBus.$on('UpdateCampaignImageHash', this.updateImageHashEventHandler);
         },
         destroyed() {
             EventBus.$off('NewCampaignDonate', this.newDonateEventHandler);
             EventBus.$off('WithdrawCampaignBalance', this.withdrawBalanceEventHandler);
             EventBus.$off('UpdateCampaignStory', this.updateStoryEventHandler);
             EventBus.$off('Transfer', this.transferEventHandler);
+            EventBus.$off('UpdateCampaignImageHash', this.updateImageHashEventHandler);
         },
         components: {
+            ImageSection,
             StorySection,
             OwnerSection,
             DonateSection,

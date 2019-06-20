@@ -175,4 +175,14 @@ if(FPContract) {
             });
         }
     });
+
+    FPContract.UpdateCampaignImageHash().watch((error, log) => {
+        if(!error) {
+            let args = log.args;
+            EventBus.$emit('UpdateCampaignImageHash', {
+                campaignId: args.campaignId.toNumber(),
+                newImageHash: web3utils.hexToString(args.newImageHash.toString())
+            });
+        }
+    });
 }
