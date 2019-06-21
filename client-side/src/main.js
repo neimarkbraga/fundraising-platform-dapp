@@ -105,11 +105,13 @@ setInterval(updateCurrentUser, 500);
 
 // listen to contract events
 if(FPContract) {
-    FPContract.NewCampaignDonate().watch((error, log) => {
+    FPContract.NewCampaignDonation().watch((error, log) => {
         if(!error) {
             let args = log.args;
-            EventBus.$emit('NewCampaignDonate', {
+            EventBus.$emit('NewCampaignDonation', {
                 campaignId: args.campaignId.toNumber(),
+                donor: args.donor.toString(),
+                message: web3utils.hexToString(args.message.toString()),
                 value: args.value.toString(),
                 totalRaised: args.totalRaised.toString()
             });

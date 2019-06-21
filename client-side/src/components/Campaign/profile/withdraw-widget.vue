@@ -84,7 +84,7 @@
                     status.errorMessage = '';
                     status.successMessage = '';
                     let hash = await new Promise((resolve, reject) => {
-                        Contract.withdrawBalance(Number(profile.id), {}, (error, result) => {
+                        Contract.withdrawCampaignBalance(Number(profile.id), {}, (error, result) => {
                             if(error) reject(error);
                             else resolve(result);
                         });

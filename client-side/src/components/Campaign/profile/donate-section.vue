@@ -2,6 +2,8 @@
     <div class="border-top p-4">
         <form @submit.prevent="submit">
             <fieldset :disabled="disableReason || status.isLoading">
+
+                <!-- value -->
                 <div class="form-group">
                     <div class="input-group">
 
@@ -21,6 +23,19 @@
                             </select>
                         </div>
                     </div>
+                </div>
+
+                <!-- message -->
+                <div class="form-group">
+                    <input type="text"
+                           class="form-control"
+                           maxlength="32"
+                           required="required"
+                           v-model="form.message"
+                           placeholder="Message" />
+                    <small class="form-text text-muted text-right m-0">
+                        {{ form.message.length }} / 32
+                    </small>
                 </div>
 
                 <!-- submit button -->
@@ -70,6 +85,7 @@
         data() {
             return {
                 form: {
+                    message: '',
                     value: 0,
                     unit: 'ether'
                 },
@@ -108,7 +124,7 @@
                 try {
                     if(form.value <= 0) throw new Error('Empty donation value.');
                     let hash = await new Promise((resolve, reject) => {
-                        Contract.donate(Number(profile.id), {
+                        Contract.donateToCampaign(Number(profile.id), web3utils.stringToHex(form.message), {
                             value: web3utils.toWei(form.value.toString(), form.unit)
                         }, (error, result) => {
                             if(error) reject(error);
@@ -116,6 +132,7 @@
                         });
                     });
                     form.value = 0;
+                    form.message = '';
                     status.successMessage = `Transaction Sent. Thank You! Raised value will update if transaction is successful after being mined. Your Tx Hash is: ${hash}`;
                 }
                 catch (error) {
