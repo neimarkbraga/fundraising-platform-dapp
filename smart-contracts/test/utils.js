@@ -27,3 +27,15 @@ module.exports.increaseTime = function increaseTime(duration) {
         );
     });
 };
+
+
+const ZERO_ADDRESS = '0x0000000000000000000000000000000000000000';
+const MINUTE = 60;
+const HOUR = MINUTE * 60;
+const DAY = HOUR * 24;
+module.exports.units = {
+    ZERO_ADDRESS,
+    MINUTE,
+    HOUR,
+    DAY
+};
