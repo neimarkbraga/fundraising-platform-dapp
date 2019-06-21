@@ -1,9 +1,9 @@
 pragma solidity ^0.5.4;
 
 import "./Ownable.sol";
-import "./CampaignOwnership.sol";
+import "./CampaignHelper.sol";
 
-contract FundraisingPlatform is CampaignOwnership, Ownable {
+contract FundraisingPlatform is CampaignHelper, Ownable {
 
     event NewPlatformDonation(uint value, uint totalReceived);
     event WithdrawPlatformDonation(uint value);
