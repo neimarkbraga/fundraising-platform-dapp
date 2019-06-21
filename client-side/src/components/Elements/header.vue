@@ -44,7 +44,7 @@
                                     <div>
                                         <app-jazzicon :address="user.address" :diameter="25" />
                                     </div>
-                                    <div class="ml-2">{{ userDisplay }}</div>
+                                    <div class="ml-2">{{ user.address | shortAddress }}</div>
                                 </div>
                             </a>
                         </router-link>
@@ -73,17 +73,7 @@
         computed: {
             ...mapGetters({
                 user: 'user/data'
-            }),
-            userDisplay() {
-                let user = this.user;
-                let result = '';
-                if(user) {
-                    result += user.address.slice(0, 6);
-                    result += '...';
-                    result += user.address.slice(-4);
-                }
-                return result;
-            }
+            })
         },
         methods: {
             updateSpaceStyle() {

@@ -67,6 +67,15 @@ Vue.filter('moment', function (value, format) {
     let momentDate = moment(value);
     return momentDate.format(format);
 });
+Vue.filter('shortAddress', function (value, format) {
+    let result = '';
+    if(value) {
+        result += value.slice(0, 6);
+        result += '...';
+        result += value.slice(-4);
+    }
+    return result;
+});
 
 
 // create vue instance
@@ -101,7 +110,6 @@ let updateCurrentUser = () => {
 };
 updateCurrentUser();
 setInterval(updateCurrentUser, 500);
-
 
 // listen to contract events
 if(FPContract) {

@@ -80,6 +80,11 @@
                                     <div class="pt-5">
                                         <deadline-section :profile="profile" />
                                     </div>
+
+                                    <!-- recent donations -->
+                                    <div class="pt-5">
+                                        <donations-section :profile="profile" />
+                                    </div>
                                 </div>
                             </div>
                         </div>
@@ -164,6 +169,7 @@
     import OwnerSection from './profile/owner-section';
     import DonateSection from './profile/donate-section';
     import DeadlineSection from './profile/deadline-section';
+    import DonationsSection from './profile/donations-section';
     import WithdrawWidget from './profile/withdraw-widget';
 
 
@@ -273,6 +279,7 @@
             OwnerSection,
             DonateSection,
             DeadlineSection,
+            DonationsSection,
             WithdrawWidget
         }
     }
