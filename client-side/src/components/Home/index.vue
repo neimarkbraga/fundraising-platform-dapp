@@ -40,7 +40,9 @@
                             <!-- action buttons -->
                             <div class="row">
                                 <div class="col-4 pr-0">
-                                    <button type="button" class="btn btn-outline-primary w-100">
+                                    <button type="button"
+                                            @click.prevent="resetFilters"
+                                            class="btn btn-outline-primary w-100">
                                         Reset
                                     </button>
                                 </div>
@@ -178,6 +180,14 @@
                     }
                     vm.campaigns.status.isLoading = false;
                 });
+            },
+
+            resetFilters() {
+                let query = this.campaigns.query;
+                query.category = null;
+                query.finished = null;
+                query.sort = 'latest';
+                this.loadCampaigns();
             }
         },
         created() {
