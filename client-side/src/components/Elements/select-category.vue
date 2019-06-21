@@ -21,6 +21,7 @@
             <select class="form-control"
                     @change="$emit('input', selected)"
                     v-model="selected">
+                <option v-if="nullName" :value="null">{{ nullName }}</option>
                 <option :value="id" v-for="(category, id) in categories" :key="id">{{ category.name }}</option>
             </select>
             <small v-if="showDescription && selectedCategory && selectedCategory.description" class="form-text text-muted">{{ selectedCategory.description }}</small>
@@ -32,7 +33,7 @@
     import axios from 'axios';
 
     export default {
-        props: ['value', 'showDescription'],
+        props: ['value', 'showDescription', 'nullName'],
         data() {
             return {
                 selected: null,

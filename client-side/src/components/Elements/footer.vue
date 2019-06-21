@@ -1,5 +1,5 @@
 <template>
-    <footer class="bg-white py-2 border-top">
+    <footer class="bg-white py-2 border-top" style="z-index: 1">
         <div class="container">
             <div class="row">
                 <div class="col p-0">

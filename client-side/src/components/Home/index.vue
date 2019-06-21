@@ -1,56 +1,113 @@
 <template>
-    <div class="bg-well occupy-view">
-        <div class="container py-4">
+    <div class="d-flex bg-well occupy-view">
+        <div class="browser-body" id="ViewContent">
 
-            <nav class="nav nav-pills flex-column flex-sm-row">
-                <a class="flex-sm-fill text-sm-center nav-link"
-                   v-for="option in campaigns.finishedOptions"
-                   @click.prevent="setCampaignsQueryFinished(option.value)"
-                   :class="{active: campaigns.query.finished === option.value }"
-                   :key="option.value"
-                   href="#">{{ option.name }}</a>
-            </nav>
+            <!-- filter content -->
+            <div class="filter-container p-4 border-right shadow-sm">
+                <div>
+                    <app-affix relative-element-selector="#ViewContent"
+                               fixed-navbar-selector="#AppNavbar"
+                               :inherit-parent-width="true"
+                               :top-offset="25"
+                               :bottom-offset="25">
+                        <form @submit.prevent="loadCampaigns">
 
-            <div v-if="campaigns.status.errorMessage">
-                <div class="p-5 text-center">
-                    <img src="../../assets/img/error.png"
-                         style="max-width: 7em"
-                         alt="Error">
-                    <h5>Error</h5>
-                    <p>{{ campaigns.status.errorMessage }}</p>
-                    <div>
-                        <button type="button"
-                                class="btn btn-sm btn-primary"
-                                @click="loadCampaigns">Reload</button>
-                    </div>
+                            <!-- category filter -->
+                            <div class="form-group">
+                                <label>Filter Category</label>
+                                <app-select-category v-model="campaigns.query.category" null-name="All" />
+                            </div>
+
+                            <!-- status filter -->
+                            <div class="form-group">
+                                <label>Filter Status</label>
+                                <select class="form-control" v-model="campaigns.query.finished">
+                                    <option :value="option.value" v-for="option in campaigns.finishedOptions" :key="option.value">
+                                        {{ option.name }}
+                                    </option>
+                                </select>
+                            </div>
+
+                            <!-- sort by -->
+                            <div class="form-group">
+                                <label>Sort By</label>
+                                <select class="form-control" v-model="campaigns.query.sort">
+                                    <option value="latest">Latest</option>
+                                    <option value="oldest">Oldest</option>
+                                </select>
+                            </div>
+
+                            <!-- action buttons -->
+                            <div class="row">
+                                <div class="col-4 pr-0">
+                                    <button type="button" class="btn btn-outline-primary w-100">
+                                        Reset
+                                    </button>
+                                </div>
+                                <div class="col-8">
+                                    <button type="submit" class="btn btn-primary w-100">
+                                        Apply
+                                    </button>
+                                </div>
+                            </div>
+                        </form>
+                    </app-affix>
                 </div>
             </div>
 
-            <div v-else>
+            <!-- result content -->
+            <div class="result-container">
+                <div class="container">
 
-                <div class="row" v-if="campaigns.status.isLoading">
-                    <div class="col-6 col-md-4 mt-4" v-for="n in 6" :key="n">
-                        <app-campaign-card />
-                    </div>
-                </div>
-
-                <div class="row" v-else>
-                    <div class="col-6 col-md-4 mt-4"
-                         v-for="campaign in campaigns.result"
-                         :key="campaign.id">
-                        <a :href="'#/campaign/' + campaign.id"
-                           style="text-decoration: none"
-                           class="d-block text-body">
-                            <app-campaign-card :data="campaign" />
-                        </a>
-                    </div>
-
-                    <div class="col-12 mt-4" v-if="!campaigns.result.length">
+                    <!-- has error -->
+                    <div v-if="campaigns.status.errorMessage">
                         <div class="p-5 text-center">
-                            <img src="../../assets/img/empty-box.png"
+                            <img src="../../assets/img/error.png"
                                  style="max-width: 7em"
                                  alt="Error">
-                            <h5>No Result</h5>
+                            <h5>Error</h5>
+                            <p>{{ campaigns.status.errorMessage }}</p>
+                            <div>
+                                <button type="button"
+                                        class="btn btn-sm btn-primary"
+                                        @click="loadCampaigns">Reload</button>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- no error -->
+                    <div v-else>
+
+                        <!-- loading -->
+                        <div class="row" v-if="campaigns.status.isLoading">
+                            <div class="col-6 col-lg-4 mt-4" v-for="n in 6" :key="n">
+                                <app-campaign-card />
+                            </div>
+                        </div>
+
+                        <!-- ready -->
+                        <div class="row" v-else>
+
+                            <!-- result item -->
+                            <div class="col-6 col-lg-4 mt-4"
+                                 v-for="campaign in campaigns.result"
+                                 :key="campaign.id">
+                                <a :href="'#/campaign/' + campaign.id"
+                                   style="text-decoration: none"
+                                   class="d-block text-body">
+                                    <app-campaign-card :data="campaign" />
+                                </a>
+                            </div>
+
+                            <!-- no result -->
+                            <div class="col-12 mt-4" v-if="!campaigns.result.length">
+                                <div class="p-5 text-center">
+                                    <img src="../../assets/img/empty-box.png"
+                                         style="max-width: 7em"
+                                         alt="Error">
+                                    <h5>No Result</h5>
+                                </div>
+                            </div>
                         </div>
                     </div>
                 </div>
@@ -63,6 +120,7 @@
     import axios from 'axios';
     import { mapGetters } from 'vuex';
     import AppCampaignCard from '../Elements/campaign-card';
+    import AppSelectCategory from '../Elements/select-category';
 
 
     export default {
@@ -75,7 +133,9 @@
                         {value: true, name: 'Done'}
                     ],
                     query: {
-                        finished: null
+                        category: null,
+                        finished: null,
+                        sort: 'latest'
                     },
                     status: {
                         isLoading: false,
@@ -124,14 +184,28 @@
             this.loadCampaigns();
         },
         components: {
-            AppCampaignCard
+            AppCampaignCard,
+            AppSelectCategory
         }
     }
 </script>
 
 
 <style lang="scss" scoped>
-    .info-section {
-        padding: 5em 0;
+    .browser-body {
+        width: 100%;
+        display: flex;
+        flex: 1 0 auto;
+
+        .filter-container {
+            background-color: white;
+            width: 325px;
+            z-index: 0;
+        }
+
+        .result-container {
+            flex: 1 0 0;
+            padding-bottom: 4.5em;
+        }
     }
 </style>
