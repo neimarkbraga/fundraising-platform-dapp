@@ -67,8 +67,9 @@ app.get('/campaign', async(req, res, next) => {
     try {
         let query = req.query;
         query.finished = query.finished || null;
+        query.owned_by = query.owned_by || null;
+        query.category = query.category || null;
         query.sort = query.sort || 'latest';
-        query.owned_by = query.owned_by || '';
 
         let campaignStatuses = await TheContract.methods.getCampaignsFinishStatus.call();
         let allowedIds = null;
@@ -96,7 +97,7 @@ app.get('/campaign', async(req, res, next) => {
 
             if(includeToResult) {
                 let campaign = await TheContract.methods.campaigns(i).call();
-                result.push({
+                let item = {
                     id: i,
                     name: web3.utils.hexToString(campaign.name),
                     category: {
@@ -110,10 +111,19 @@ app.get('/campaign', async(req, res, next) => {
                     end_date: new Date(campaign.deadline.toNumber() * 1000).toLocaleString(),
                     raised: campaign.raised.toString(),
                     finished: campaignStatuses[i]
-                });
+                };
+
+                // category filter
+                if(query.category && Number(query.category) !== Number(campaign.category)) includeToResult = false;
+
+                if(includeToResult) result.push(item);
             }
         }
+
+
+        // sort option
         if(query.sort === 'latest') result.reverse();
+
         res.json(result);
     } catch(error) {
         next(error);
@@ -208,21 +218,3 @@ let server = app.listen(86, () => {
     console.log(`Server is running @ port ${server.address().port}`);
     console.log('=================================================');
 });
-
-
-/*
-(async() => {
-    let campaignStatuses = await TheContract.methods.getCampaignsFinishStatus.call();
-    for(let i = 0; i < campaignStatuses.length; i++) {
-        let campaign = await TheContract.methods.campaigns(i).call();
-        console.log({
-            name: web3.utils.hexToString(campaign.name),
-            story: web3.utils.hexToString(campaign.story),
-            imageHash: web3.utils.hexToString(campaign.imageHash),
-            goal: campaign.goal.toString(),
-            deadline: campaign.deadline.toString(),
-            raised: campaign.raised.toString()
-        });
-    }
-
-})();*/
