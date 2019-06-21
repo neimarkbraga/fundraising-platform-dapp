@@ -162,6 +162,28 @@ app.get('/campaign/:id', async(req, res, next) => {
 });
 
 
+// get campaign donations
+app.get('/campaign/:id/donation', async(req, res, next) => {
+    try {
+        let params = req.params;
+        params.id = parseInt(params.id);
+
+        let donations = await TheContract.methods.getCampaignDonations(params.id).call();
+
+        res.json(donations.donors.map((donor, index) => {
+            return {
+                donor,
+                message: web3.utils.hexToString(donations.messages[index]),
+                value: donations.values[index].toString()
+            };
+        }).reverse());
+    } catch(error) {
+        if(/invalid opcode/.test(error.message)) next(new Error('ID does not exist.'));
+        else next(error);
+    }
+});
+
+
 // get list of all categories
 app.get('/category', async(req, res) => {
     res.json(campaignCategories.map((category, id) => {
@@ -170,24 +192,6 @@ app.get('/category', async(req, res) => {
             ...category
         };
     }));
-});
-
-
-// get info of participant
-app.get('/participant/:address', async(req, res, next) => {
-    try {
-        let params = req.params;
-        let ownedCampaigns = await TheContract.methods.getCampaignsByOwner(params.address).call();
-        let platformOwner = await TheContract.methods.owner.call();
-
-        res.json({
-            ownedCampaigns: ownedCampaigns.map(a => a.toNumber()),
-            isPlatformOwner: platformOwner === params.address
-        });
-    }
-    catch (error) {
-        next(error);
-    }
 });
 
 
