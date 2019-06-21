@@ -121,7 +121,7 @@
                 status.successMessage = '';
                 try {
                     let hash = await new Promise((resolve, reject) => {
-                        Contract.updateStory(Number(profile.id), web3utils.stringToHex(form.story), {}, (error, result) => {
+                        Contract.updateCampaignStory(Number(profile.id), web3utils.stringToHex(form.story), {}, (error, result) => {
                             if(error) reject(error);
                             else resolve(result);
                         });

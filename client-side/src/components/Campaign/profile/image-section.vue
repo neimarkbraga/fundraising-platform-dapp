@@ -158,7 +158,7 @@
                     if(!form.imageFile) throw new Error('Image file is required.');
                     let imageHash = (await ipfs.add(form.imageFile))[0].hash;
                     let hash = await new Promise((resolve, reject) => {
-                        Contract.updateImageHash(profile.id, web3utils.stringToHex(imageHash), {}, (error, result) => {
+                        Contract.updateCampaignImageHash(profile.id, web3utils.stringToHex(imageHash), {}, (error, result) => {
                             if(error) reject(error);
                             else resolve(result);
                         });

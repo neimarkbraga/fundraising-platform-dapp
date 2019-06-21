@@ -206,7 +206,7 @@
                 }
                 status.isLoading = false;
             },
-            newDonateEventHandler(data) {
+            newDonationEventHandler(data) {
                 let vm = this;
                 let profile = vm.profile;
                 if(profile && profile.id.toString() === data.campaignId.toString()) {
@@ -252,7 +252,7 @@
         },
         created() {
             this.loadProfile();
-            EventBus.$on('NewCampaignDonate', this.newDonateEventHandler);
+            EventBus.$on('NewCampaignDonation', this.newDonationEventHandler);
             EventBus.$on('WithdrawCampaignBalance', this.withdrawBalanceEventHandler);
             EventBus.$on('UpdateCampaignStory', this.updateStoryEventHandler);
             EventBus.$on('Transfer', this.transferEventHandler);
@@ -260,7 +260,7 @@
             EventBus.$on('ExtendCampaignDeadline', this.extendDeadlineEventHandler);
         },
         destroyed() {
-            EventBus.$off('NewCampaignDonate', this.newDonateEventHandler);
+            EventBus.$off('NewCampaignDonation', this.newDonationEventHandler);
             EventBus.$off('WithdrawCampaignBalance', this.withdrawBalanceEventHandler);
             EventBus.$off('UpdateCampaignStory', this.updateStoryEventHandler);
             EventBus.$off('Transfer', this.transferEventHandler);

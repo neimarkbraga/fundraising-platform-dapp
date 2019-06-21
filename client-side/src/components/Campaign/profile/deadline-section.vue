@@ -180,7 +180,7 @@
                     duration += form.hours * HOUR;
                     duration += form.days * DAY;
                     let hash = await new Promise((resolve, reject) => {
-                        Contract.extendDeadline(profile.id, duration, {}, (error, result) => {
+                        Contract.extendCampaignDeadline(profile.id, duration, {}, (error, result) => {
                             if(error) reject(error);
                             else resolve(result);
                         });
