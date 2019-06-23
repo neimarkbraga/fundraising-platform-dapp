@@ -86,32 +86,32 @@ new Vue({
 }).$mount('#app');
 
 
-// ensure user data
-let currentUser = null;
-let getCurrentUserAddress = () => {
-    let web3 = window.web3 || web3 || null;
-    if(web3 && web3.eth && web3.eth.accounts && web3.eth.accounts.length) {
-        return web3.eth.accounts[0];
-    }
-    return null;
-};
-let updateCurrentUser = () => {
-    let address = getCurrentUserAddress();
-    if(address && currentUser !== address) {
-        store.dispatch('user/data', {
-            address: address
-        });
-        currentUser = address;
-    }
-    else if(!address) {
-        store.dispatch('user/data', null);
-        currentUser = null;
-    }
-};
-updateCurrentUser();
-setInterval(updateCurrentUser, 500);
+// metamask user checker
+(() => {
+    let currentUser = null;
+    let getCurrentUserAddress = () => {
+        let web3 = window.web3 || web3 || null;
+        if(web3 && web3.eth && web3.eth.accounts && web3.eth.accounts.length) {
+            return web3.eth.accounts[0];
+        }
+        return null;
+    };
+    let updateCurrentUser = () => {
+        let address = getCurrentUserAddress();
+        if(currentUser !== address) {
+            if(address) store.dispatch('user/data', { address: address });
+            else store.dispatch('user/data', null);
+            currentUser = address;
+            window.dispatchEvent(new Event('resize'));
+        }
+    };
 
-// listen to contract events
+    updateCurrentUser();
+    setInterval(updateCurrentUser, 500);
+})();
+
+
+// contract event handlers
 if(FPContract) {
     FPContract.NewCampaignDonation().watch((error, log) => {
         if(!error) {
