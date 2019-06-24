@@ -14,7 +14,7 @@
                         </p>
 
                         <form class="mt-4" @submit.prevent="donate">
-                            <fieldset :disabled="status.isLoading">
+                            <fieldset :disabled="disableReason || status.isLoading">
                                 <div class="form-group">
                                     <div class="input-group">
 
@@ -68,6 +68,9 @@
                                             type="button">&times;</button>
                                     <p class="m-0">{{ status.successMessage }}</p>
                                 </div>
+
+                                <!-- disable reason -->
+                                <p v-if="disableReason" class="text-center mb-0 mt-2 text-muted">{{ disableReason }}</p>
                             </fieldset>
                         </form>
                     </div>
@@ -114,7 +117,12 @@
             ...mapGetters({
                 user: 'user/data',
                 ethUnits: 'config/ethUnits'
-            })
+            }),
+            disableReason() {
+                let user = this.user;
+                if(!user) return 'No Metamask Account Found or Metamask is not installed.';
+                return false;
+            }
         },
         methods: {
             async donate() {
