@@ -48,7 +48,7 @@
                                     <!-- name and category -->
                                     <div>
                                         <h1>{{ profile.name }}</h1>
-                                        <p class="text-muted">{{ profile.category.name }}</p>
+                                        <p class="text-muted">{{ profile.category.name }}&nbsp;&nbsp;&bull;&nbsp;&nbsp;{{ profile.timestampEpoch * 1000 | moment }}</p>
                                     </div>
 
 

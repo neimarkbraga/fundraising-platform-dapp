@@ -122,6 +122,7 @@ if(FPContract) {
                 donor: args.donor.toString(),
                 message: web3utils.hexToString(args.message.toString()),
                 value: args.value.toString(),
+                timestamp: args.timestamp.toString(),
                 totalRaised: args.totalRaised.toString()
             });
         }
