@@ -108,8 +108,8 @@ app.get('/campaign', async(req, res, next) => {
                     imageHash: web3.utils.hexToString(campaign.imageHash),
                     goal: campaign.goal.toString(),
                     deadline: campaign.deadline.toString(),
-                    end_date: new Date(campaign.deadline.toNumber() * 1000).toLocaleString(),
                     raised: campaign.raised.toString(),
+                    timestamp: campaign.timestamp.toString(),
                     finished: campaignStatuses[i]
                 };
 
@@ -153,7 +153,9 @@ app.get('/campaign/:id', async(req, res, next) => {
             raised: campaign.raised.toString(),
             balance: campaign.balance.toString(),
             finished: campaign.deadline.toNumber() <= Math.floor(new Date().getTime() / 1000),
-            owner: await TheContract.methods.campaignToOwner(params.id).call()
+            owner: await TheContract.methods.campaignToOwner(params.id).call(),
+            timestampEpoch: campaign.timestamp.toString(),
+            timestampDate: new Date(campaign.timestamp.toNumber() * 1000)
         });
     } catch(error) {
         if(/invalid opcode/.test(error.message)) next(new Error('ID does not exist.'));
@@ -174,7 +176,8 @@ app.get('/campaign/:id/donation', async(req, res, next) => {
             return {
                 donor,
                 message: web3.utils.hexToString(donations.messages[index]),
-                value: donations.values[index].toString()
+                value: donations.values[index].toString(),
+                timestamp: donations.timestamps[index].toString()
             };
         }).reverse());
     } catch(error) {
