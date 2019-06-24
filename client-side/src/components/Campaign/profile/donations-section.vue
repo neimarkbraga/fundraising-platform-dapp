@@ -40,6 +40,7 @@
                         <thead>
                             <tr>
                                 <th>User</th>
+                                <th>Date Time</th>
                                 <th>Value</th>
                                 <th>Remarks</th>
                             </tr>
@@ -55,6 +56,9 @@
                                             {{ donation.donor | shortAddress}}
                                         </div>
                                     </div>
+                                </td>
+                                <td>
+                                    {{ donation.timestamp * 1000 | moment }}
                                 </td>
                                 <td>
                                     {{ donation.value | fromWei }} ETH
