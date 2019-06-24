@@ -22,6 +22,7 @@ contract CampaignFactory {
         uint deadline;
         uint raised;
         uint balance;
+        uint timestamp;
     }
 
 
@@ -52,7 +53,7 @@ contract CampaignFactory {
         require(_name[0] != 0);
         require(_targetAmount > 0);
         require(_duration > 0);
-        uint id = campaigns.push(Campaign(_name, _category, _story, _imageHash, _targetAmount, now + _duration, 0, 0)) - 1;
+        uint id = campaigns.push(Campaign(_name, _category, _story, _imageHash, _targetAmount, now + _duration, 0, 0, now)) - 1;
         campaignToOwner[id] = msg.sender;
         ownerCampaignCount[msg.sender] = ownerCampaignCount[msg.sender].add(1);
         emit NewCampaign(id, _name);
