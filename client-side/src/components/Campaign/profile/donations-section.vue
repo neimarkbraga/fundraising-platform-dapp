@@ -79,7 +79,6 @@
 <script>
     import axios from 'axios';
     import EventBus from '../../../library/EventBus';
-    const web3utils = require('web3-utils');
 
     export default {
         props: ['profile'],
@@ -104,7 +103,7 @@
                     this.donations = response.data;
                 }
                 catch (error) {
-                    status.errorMessage = vm.$appUtil.getErrorMessage(error);
+                    status.errorMessage = this.$appUtil.getErrorMessage(error);
                 }
                 status.isLoading = false;
             },

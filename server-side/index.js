@@ -3,12 +3,9 @@ const cors = require('cors');
 const Web3 = require('web3');
 const app = express();
 
-let web3 = new Web3(new Web3.providers.HttpProvider('http://localhost:8545'));
-let contractBuild = require('../smart-contracts/build/contracts/FundraisingPlatform');
-let contractAbi = contractBuild.abi;
-let contractAddress = contractBuild.networks["5777"].address;
-let TheContract = new web3.eth.Contract(contractAbi, contractAddress);
-
+let dappConfig = require('../dapp.config');
+let web3 = new Web3(new Web3.providers.HttpProvider(dappConfig.web3HttpProvider));
+let TheContract = new web3.eth.Contract(dappConfig.contractABI, dappConfig.contractAddress);
 
 let campaignCategories = [
     {

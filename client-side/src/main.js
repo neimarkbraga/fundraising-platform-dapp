@@ -12,11 +12,12 @@ import AppImageBox from './components/Plugins/image-box';
 import AppAffix from './components/Plugins/affix';
 import AppJazzicon from 'vue-jazzicon';
 
+const dappConfig = require('../../dapp.config');
 const web3utils = require('web3-utils');
 
 // configs
 Vue.config.productionTip = false;
-axios.defaults.baseURL = 'http://localhost:86';
+axios.defaults.baseURL = dappConfig.serverSideURL;
 
 // prototypes
 Vue.prototype.$appUtil = util;
@@ -67,7 +68,7 @@ Vue.filter('moment', function (value, format) {
     let momentDate = moment(value);
     return momentDate.format(format);
 });
-Vue.filter('shortAddress', function (value, format) {
+Vue.filter('shortAddress', function (value) {
     let result = '';
     if(value) {
         result += value.slice(0, 6);
