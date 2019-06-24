@@ -217,6 +217,7 @@
                 let profile = vm.profile;
                 if(profile && profile.id.toString() === data.campaignId.toString()) {
                     profile.raised = data.totalRaised;
+                    profile.balance = data.totalRaised;
                 }
             },
             withdrawBalanceEventHandler(data) {
