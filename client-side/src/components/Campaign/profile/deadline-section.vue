@@ -7,7 +7,7 @@
             </div>
             <div>
                 <button type="button"
-                        v-if="isOwner && !updateMode"
+                        v-if="!profile.finished && isOwner && !updateMode"
                         @click.prevent="setUpdateMode(true)"
                         class="btn btn-sm btn-link text-nowrap">Extend Deadline</button>
             </div>
