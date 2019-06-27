@@ -37,6 +37,7 @@
         </div>
 
         <datalist id="IpfsGateways">
+            <option value="https://ipfs.infura.io/ipfs/"></option>
             <option value="https://cloudflare-ipfs.com/ipfs/"></option>
             <option value="https://ipfs.iamneimark.com/ipfs/"></option>
             <option value="https://gateway.ipfs.io/ipfs/"></option>
