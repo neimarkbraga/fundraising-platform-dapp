@@ -17,6 +17,18 @@
                                list="IpfsGateways"
                                class="form-control" />
                     </div>
+
+                    <div class="form-group">
+                        <label>IPFS Client</label>
+                        <select class="form-control" v-model="form.ipfsClient">
+                            <option v-for="option in ipfsClientOptions"
+                                    :value="option"
+                                    :key="option">
+                                {{ option }}
+                            </option>
+                        </select>
+                    </div>
+
                     <div class="row mt-4">
                         <div class="col-5">
                             <button type="button"
@@ -54,6 +66,7 @@
 </template>
 
 <script>
+    import AppIPFS from '../../library/ipfs';
     import { mapGetters } from 'vuex';
 
     export default {
@@ -61,8 +74,10 @@
             return {
                 isOpen: false,
                 form: {
-                    ipfsGateway: ''
-                }
+                    ipfsGateway: '',
+                    ipfsClient: ''
+                },
+                ipfsClientOptions: Object.keys(AppIPFS.clients)
             };
         },
         computed: {
@@ -76,15 +91,23 @@
                 this.isOpen = open;
                 if(open) {
                     this.form.ipfsGateway = this.ipfsGateway;
+                    this.form.ipfsClient = AppIPFS.getSelectedClientName();
                 }
             },
             save() {
                 let form = this.form;
                 let store = this.$store;
+
+
+                // ipfs gateway
                 let ipfsGateway = form.ipfsGateway;
                 if(!/\/$/.test(ipfsGateway)) ipfsGateway += '/';
                 window.localStorage.setItem('ipfsGateway', ipfsGateway);
                 store.dispatch('config/ipfsGateway', ipfsGateway);
+
+                // ipfs client
+                AppIPFS.setSelectedClientName(form.ipfsClient);
+
                 this.setOpen(false);
             }
         }

@@ -92,7 +92,7 @@
 </template>
 
 <script>
-    import ipfs from '../../../library/ipfs';
+    import AppIPFS from '../../../library/ipfs';
     import { mapGetters } from 'vuex';
 
     const web3utils = require('web3-utils');
@@ -146,6 +146,7 @@
                 vm.setFormImageFile(file);
             },
             async saveImage() {
+                let ipfs = AppIPFS.getSelectedClientInstance();
                 let form = this.form;
                 let status = this.status;
                 let profile = this.profile;

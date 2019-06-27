@@ -185,7 +185,7 @@
 </template>
 
 <script>
-    import ipfs from '../../library/ipfs';
+    import AppIPFS from '../../library/ipfs';
     import AppSelectCategory from '../Elements/select-category';
     import { mapGetters } from 'vuex';
 
@@ -250,6 +250,7 @@
                 status.errorMessage = '';
                 status.successMessage = '';
                 try {
+                    let ipfs = AppIPFS.getSelectedClientInstance();
                     let args = {
                         _name: web3utils.stringToHex(form.name),
                         _category: form.category,
