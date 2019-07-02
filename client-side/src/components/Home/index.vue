@@ -59,7 +59,7 @@
 
             <!-- result content -->
             <div class="result-container">
-                <div class="container">
+                <div class="container pr-0">
 
                     <!-- has error -->
                     <div v-if="campaigns.status.errorMessage">
@@ -81,17 +81,17 @@
                     <div v-else>
 
                         <!-- loading -->
-                        <div class="row" v-if="campaigns.status.isLoading">
-                            <div class="col-6 col-lg-4 mt-4" v-for="n in 6" :key="n">
+                        <div class="row m-0" v-if="campaigns.status.isLoading">
+                            <div class="col-6 col-lg-4 mt-4 pl-0" v-for="n in 6" :key="n">
                                 <app-campaign-card />
                             </div>
                         </div>
 
                         <!-- ready -->
-                        <div class="row" v-else>
+                        <div class="row m-0" v-else>
 
                             <!-- result item -->
-                            <div class="col-6 col-lg-4 mt-4"
+                            <div class="col-6 col-lg-4 mt-4 pl-0"
                                  v-for="campaign in campaigns.result"
                                  :key="campaign.id">
                                 <a :href="'#/campaign/' + campaign.id"
@@ -208,9 +208,14 @@
         flex: 1 0 auto;
 
         .filter-container {
+            display: none;
             background-color: white;
             width: 325px;
             z-index: 0;
+
+            @include media-breakpoint-up('md') {
+                display: block;
+            }
         }
 
         .result-container {

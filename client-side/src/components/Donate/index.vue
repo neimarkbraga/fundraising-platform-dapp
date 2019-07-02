@@ -76,7 +76,7 @@
                     </div>
                 </div>
                 <div class="col d-flex align-items-center justify-content-center">
-                    <div class="d-flex">
+                    <div class="d-flex py-5">
                         <div class="pr-3">
                             <img src="../../assets/img/logo.png"
                                  style="max-width: 100px"

@@ -149,9 +149,8 @@
             position: absolute;
             bottom:  100%;
             right: 100%;
-
-
             width: 400px;
+            max-width: 85vw;
             max-height: 70vh;
         }
     }

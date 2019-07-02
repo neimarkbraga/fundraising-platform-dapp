@@ -36,7 +36,7 @@
 
             <div v-else class="">
                 <div v-if="isPlatformOwner" class="row">
-                    <div class="col">
+                    <div class="col mb-5">
                         <div class="bg-white rounded border shadow-sm">
                             <div class="px-4 py-3 border-bottom">
                                 <h5 class="m-0">Received Donations</h5>
@@ -46,7 +46,8 @@
                             </div>
                         </div>
                     </div>
-                    <div class="col">
+
+                    <div class="col mb-5">
                         <div class="bg-white rounded border shadow-sm">
                             <div class="px-4 py-3 border-bottom">
                                 <h5 class="m-0">Transfer Platform Ownership</h5>

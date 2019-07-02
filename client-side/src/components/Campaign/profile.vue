@@ -4,7 +4,7 @@
             <div id="ViewContent" class="row">
 
                 <!-- main content -->
-                <div class="col-8">
+                <div class="col-12 col-lg-8 mb-4">
                     <div class="bg-white rounded shadow-sm" style="overflow: hidden">
 
                         <!-- has error -->
@@ -92,7 +92,7 @@
                 </div>
 
                 <!-- side content -->
-                <div class="col-4">
+                <div class="col-12 col-lg-4">
                     <div v-if="!status.isLoading && !status.errorMessage && profile">
                         <app-affix relative-element-selector="#ViewContent"
                                    fixed-navbar-selector="#AppNavbar"

@@ -1,5 +1,5 @@
 <template>
-    <div class="bg-well occupy-view">
+    <div class="bg-well occupy-view" style="overflow: auto">
         <div class="container pb-5">
             <div class="d-flex py-4">
                 <div class="pr-2">

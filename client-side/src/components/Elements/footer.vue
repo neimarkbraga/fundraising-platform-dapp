@@ -1,8 +1,8 @@
 <template>
     <footer class="bg-white py-2 border-top" style="z-index: 1">
         <div class="container">
-            <div class="row">
-                <div class="col p-0">
+            <div class="row m-0">
+                <div class="col-7 p-0">
                     &copy; Neimark Junsay Braga
                 </div>
                 <div class="col p-0 text-right text-muted">
