@@ -53,9 +53,13 @@
             </div>
         </nav>
         <div ref="Spacer" :style="space_style"></div>
-        <div v-if="!user" class="alert alert-warning rounded-0 m-0">
-            <h5 class="m-0">No Metamask Account Found</h5>
-            <p class="m-0">Please make sure you installed metamask on your browser to make transactions in this app.</p>
+
+        <div v-if="!user">
+            <div class="alert alert-warning rounded-0 m-0">
+                <h5 class="m-0">No Metamask Account Found</h5>
+                <p class="m-0">Please make sure you installed metamask on your browser to make transactions in this app.</p>
+                <p>If you already installed metamask, <a href="#" @click.prevent="enableMetamask">click here!</a></p>
+            </div>
         </div>
     </header>
 </template>
@@ -76,6 +80,9 @@
             })
         },
         methods: {
+            async enableMetamask() {
+                if(window.ethereum) await window.ethereum.enable();
+            },
             updateSpaceStyle() {
                 let navbar = this.$refs.Navbar;
                 let height = 0;
