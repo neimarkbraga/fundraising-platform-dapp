@@ -86,7 +86,7 @@
                         <div>
                             <h1 class="m-0">Fundraising</h1>
                             <h4 class="m-0">Platform</h4>
-                            <p class="m-0">Project of Neimark Junsay Braga</p>
+                            <p class="m-0">Project of Neimark</p>
                         </div>
                     </div>
                 </div>

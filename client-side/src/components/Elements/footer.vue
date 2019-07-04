@@ -3,7 +3,7 @@
         <div class="container">
             <div class="row m-0">
                 <div class="col-7 p-0">
-                    &copy; Neimark Junsay Braga
+                    &copy; Neimark
                 </div>
                 <div class="col p-0 text-right text-muted">
                     <div v-if="platformInfoStatus.isLoading">
