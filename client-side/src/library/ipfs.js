@@ -2,8 +2,8 @@ import IpfsClient from 'ipfs-http-client';
 
 const lsKey = 'ipfsClient';
 const clients = {
-    'localhost': IpfsClient('localhost', '5001'),
-    'infura.io': IpfsClient('ipfs.infura.io', '5001', {protocol: 'https'})
+    'infura.io': IpfsClient('ipfs.infura.io', '5001', {protocol: 'https'}),
+    'localhost': IpfsClient('localhost', '5001')
 };
 
 let getSelectedClientName = () => {
