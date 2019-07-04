@@ -52,4 +52,13 @@ contract('Campaign Donating', accounts => {
         assert.ok(/^0x4e/i.test(donations.messages[0]));
         assert.ok(/^0xCA35/i.test(donations.messages[1]));
     });
+
+    it('Can get campaign donations count', async() => {
+        await _contract.createCampaign('0x4e', 0, '0x4e', '0x4e', 100, 100, {from: accounts[0]});
+        await _contract.donateToCampaign(0, '0x4e', {from: accounts[0], value: 50});
+        await _contract.donateToCampaign(0, '0xCA35', {from: accounts[1], value: 100});
+
+        let donationsCount = await _contract.getCampaignDonationsCount.call(0);
+        assert.equal(donationsCount, 2);
+    });
 });
