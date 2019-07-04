@@ -51,4 +51,8 @@ contract CampaignDonating is CampaignOwnership {
         }
         return (donors_result, messages_result, values_result, timestamps_result);
     }
+
+    function getCampaignDonationsCount(uint _campaignId) view public returns (uint) {
+        return campaignDonations[_campaignId].length;
+    }
 }
